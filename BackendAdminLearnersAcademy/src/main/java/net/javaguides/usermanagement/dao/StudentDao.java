@@ -18,11 +18,11 @@ import net.javaguides.usermanagement.util.HibernateUtil;
 public class StudentDao {
 
 	/**
-	 * Save User
+	 * Save Student
 	 * 
-	 * @param user
+	 * @param Student
 	 */
-	public void saveUser(Student student) {
+	public void saveStudent(Student student) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
@@ -40,7 +40,7 @@ public class StudentDao {
 	}
 
 	/**
-	 * Update User
+	 * Update Student
 	 * 
 	 * @param student
 	 */
@@ -62,22 +62,22 @@ public class StudentDao {
 	}
 
 	/**
-	 * Delete User
+	 * Delete Student
 	 * 
 	 * @param id
 	 */
-	public void deleteUser(int id) {
+	public void deleteStudent(int id) {
 
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 
-			// Delete a user object
+			// Delete a Student object
 			Student student = session.get(Student.class, id);
 			if (student != null) {
 				session.delete(student);
-				System.out.println("user is deleted");
+				System.out.println("Student is deleted");
 			}
 
 			// commit transaction
@@ -91,7 +91,7 @@ public class StudentDao {
 	}
 
 	/**
-	 * Get User By ID
+	 * Get Student By ID
 	 * 
 	 * @param id
 	 * @return
@@ -103,7 +103,7 @@ public class StudentDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an Student object
 			student = session.get(Student.class, id);
 			// commit transaction
 			transaction.commit();
@@ -117,7 +117,7 @@ public class StudentDao {
 	}
 
 	/**
-	 * Get all Users
+	 * Get all Students
 	 * 
 	 * @return
 	 */
@@ -129,7 +129,7 @@ public class StudentDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an Student object
 
 			 Query<Student> createQuery = session.createQuery("FROM Student",Student.class);
 			 listOfStudent = createQuery.getResultList();
@@ -152,7 +152,7 @@ public class StudentDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an Student object
 
 			
 			 @SuppressWarnings("rawtypes")

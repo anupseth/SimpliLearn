@@ -43,10 +43,7 @@ public class Classes {
 
 	@OneToMany(mappedBy = "classes")
 	private List<Student> students = new ArrayList<Student>();
-//	
-//	@ManyToMany
-//	private List<Teacher> tearchers;
-//	
+
 	@OneToMany(mappedBy = "classes")
 	private List<Subject> subjects = new ArrayList<Subject>();
 
@@ -76,15 +73,7 @@ public class Classes {
 	public void setStudents(List<Student> students) {
 		this.students = students;
 	}
-//
-//	public List<Teacher> getTearchers() {
-//		return tearchers;
-//	}
-//
-//	public void setTearchers(List<Teacher> tearchers) {
-//		this.tearchers = tearchers;
-//	}
-//
+
 	public List<Subject> getSubjects() {
 		return subjects;
 	}

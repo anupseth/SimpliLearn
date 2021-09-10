@@ -24,6 +24,10 @@ public class Subject {
 	@JoinColumn(name = "fk_class")
 	private Classes classes; 
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_teacher")
+	private Teacher teacher;
+	
 	public Subject() {
 		// TODO Auto-generated constructor stub
 	}

@@ -65,6 +65,8 @@ public class Test_ClassesStudent {
 		subdao.saveSubject(sub2);
 		subdao.saveSubject(sub3);
 		
+		
+		// Get entities
 		List<Student> allUser = studDao.getAllStudent();
 		List<Object[]> allStudentsForParticularClass = classedDao.executeNamedQueriesMultipleTableAsResult();
 		

@@ -7,7 +7,6 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import net.javaguides.usermanagement.model.Classes;
-import net.javaguides.usermanagement.model.Student;
 import net.javaguides.usermanagement.model.Subject;
 import net.javaguides.usermanagement.util.HibernateUtil;
 
@@ -20,17 +19,17 @@ import net.javaguides.usermanagement.util.HibernateUtil;
 public class ClassesDao {
 
 	/**
-	 * Save User
+	 * Save Classes
 	 * 
-	 * @param user
+	 * @param classes
 	 */
-	public void saveClasses(Classes user) {
+	public void saveClasses(Classes classes) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.save(user);
+			session.save(classes);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -42,17 +41,17 @@ public class ClassesDao {
 	}
 
 	/**
-	 * Update User
+	 * Update Classes
 	 * 
-	 * @param user
+	 * @param classes
 	 */
-	public void updateUser(Classes user) {
+	public void updateClasses(Classes classes) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.update(user);
+			session.update(classes);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -64,22 +63,22 @@ public class ClassesDao {
 	}
 
 	/**
-	 * Delete User
+	 * Delete Classes
 	 * 
 	 * @param id
 	 */
-	public void deleteUser(int id) {
+	public void deleteClasses(int id) {
 
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 
-			// Delete a user object
+			// Delete a classes object
 			Classes classes = session.get(Classes.class, id);
 			if (classes != null) {
 				session.delete(classes);
-				System.out.println("user is deleted");
+				System.out.println("classes is deleted");
 			}
 
 			// commit transaction
@@ -93,7 +92,7 @@ public class ClassesDao {
 	}
 
 	/**
-	 * Get User By ID
+	 * Get Classes By ID
 	 * 
 	 * @param id
 	 * @return
@@ -105,7 +104,7 @@ public class ClassesDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an classes object
 			classes = session.get(Classes.class, id);
 			// commit transaction
 			transaction.commit();
@@ -119,7 +118,7 @@ public class ClassesDao {
 	}
 
 	/**
-	 * Get all Users
+	 * Get all Classes
 	 * 
 	 * @return
 	 */
@@ -131,7 +130,7 @@ public class ClassesDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an classes object
 
 			listOfClasses = session.createQuery("from Classes").getResultList();
 
@@ -153,7 +152,7 @@ public class ClassesDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an classes object
 			Query<Subject> namedQuery = session.createNamedQuery("GetAllSubjectsForAStudent", Subject.class);
 			namedQuery.setParameter("id", 1);
 			listOfStudent = namedQuery.getResultList();
@@ -177,7 +176,7 @@ public class ClassesDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an classes object
 			Query namedQuery = session.createNamedQuery("GetAllSubjectsAndClassForAStudent");
 			namedQuery.setParameter("id", 1);
 			listOfStudent = namedQuery.getResultList();

@@ -3,6 +3,7 @@ package net.javaguides.usermanagement.dao;
 import java.util.List;
 
 
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -18,17 +19,17 @@ import net.javaguides.usermanagement.util.HibernateUtil;
 public class TeacherDao {
 
 	/**
-	 * Save User
+	 * Save Teacher
 	 * 
-	 * @param user
+	 * @param teacher
 	 */
-	public void saveUser(Teacher student) {
+	public void saveTeacher(Teacher teacher) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.save(student);
+			session.save(teacher);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -40,17 +41,17 @@ public class TeacherDao {
 	}
 
 	/**
-	 * Update User
+	 * Update Teacher
 	 * 
-	 * @param user
+	 * @param teacher
 	 */
-	public void updateUser(Teacher user) {
+	public void updateTeacher(Teacher teacher) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.update(user);
+			session.update(teacher);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -62,22 +63,22 @@ public class TeacherDao {
 	}
 
 	/**
-	 * Delete User
+	 * Delete Teacher
 	 * 
 	 * @param id
 	 */
-	public void deleteUser(int id) {
+	public void deleteTeacher(int id) {
 
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 
-			// Delete a user object
-			Teacher user = session.get(Teacher.class, id);
-			if (user != null) {
-				session.delete(user);
-				System.out.println("user is deleted");
+			// Delete a teacher object
+			Teacher teacher = session.get(Teacher.class, id);
+			if (teacher != null) {
+				session.delete(teacher);
+				System.out.println("teacher is deleted");
 			}
 
 			// commit transaction
@@ -91,20 +92,20 @@ public class TeacherDao {
 	}
 
 	/**
-	 * Get User By ID
+	 * Get Teacher By ID
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public Teacher getUser(int id) {
+	public Teacher getTeacher(int id) {
 
 		Transaction transaction = null;
-		Teacher user = null;
+		Teacher teacher = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
-			user = session.get(Teacher.class, id);
+			// get an teacher object
+			teacher = session.get(Teacher.class, id);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -113,25 +114,25 @@ public class TeacherDao {
 			}
 			e.printStackTrace();
 		}
-		return user;
+		return teacher;
 	}
 
 	/**
-	 * Get all Users
+	 * Get all Teachers
 	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Teacher> getAllUser() {
+	public List<Teacher> getAllTeacher() {
 
 		Transaction transaction = null;
-		List<Teacher> listOfUser = null;
+		List<Teacher> listOfTeacher = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an teacher object
 
-			listOfUser = session.createQuery("from Teacher").getResultList();
+			listOfTeacher = session.createQuery("from Teacher").getResultList();
 
 			// commit transaction
 			transaction.commit();
@@ -141,6 +142,6 @@ public class TeacherDao {
 			}
 			e.printStackTrace();
 		}
-		return listOfUser;
+		return listOfTeacher;
 	}
 }

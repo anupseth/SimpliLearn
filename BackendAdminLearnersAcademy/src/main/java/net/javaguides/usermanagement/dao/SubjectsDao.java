@@ -18,9 +18,9 @@ import net.javaguides.usermanagement.util.HibernateUtil;
 public class SubjectsDao {
 
 	/**
-	 * Save User
+	 * Save Subject
 	 * 
-	 * @param user
+	 * @param subject
 	 */
 	public void saveSubject(Subject subject) {
 		Transaction transaction = null;
@@ -40,7 +40,7 @@ public class SubjectsDao {
 	}
 
 	/**
-	 * Update User
+	 * Update Subject
 	 * 
 	 * @param subject
 	 */
@@ -62,7 +62,7 @@ public class SubjectsDao {
 	}
 
 	/**
-	 * Delete User
+	 * Delete Subject
 	 * 
 	 * @param id
 	 */
@@ -73,11 +73,11 @@ public class SubjectsDao {
 			// start a transaction
 			transaction = session.beginTransaction();
 
-			// Delete a user object
+			// Delete a subject object
 			Subject subject = session.get(Subject.class, id);
 			if (subject != null) {
 				session.delete(subject);
-				System.out.println("user is deleted");
+				System.out.println("subject is deleted");
 			}
 
 			// commit transaction
@@ -91,7 +91,7 @@ public class SubjectsDao {
 	}
 
 	/**
-	 * Get User By ID
+	 * Get Subject By ID
 	 * 
 	 * @param id
 	 * @return
@@ -103,7 +103,7 @@ public class SubjectsDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an subject object
 			subject = session.get(Subject.class, id);
 			// commit transaction
 			transaction.commit();
@@ -117,7 +117,7 @@ public class SubjectsDao {
 	}
 
 	/**
-	 * Get all Users
+	 * Get all Subjects
 	 * 
 	 * @return
 	 */
@@ -129,7 +129,7 @@ public class SubjectsDao {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
-			// get an user object
+			// get an subject object
 
 			 Query<Subject> createQuery = session.createQuery("FROM Subject",Subject.class);
 			 listOfSubjects = createQuery.getResultList();
