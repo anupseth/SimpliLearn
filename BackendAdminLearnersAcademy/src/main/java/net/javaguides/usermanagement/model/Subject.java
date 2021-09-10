@@ -65,6 +65,14 @@ public class Subject {
 	public String toString() {
 		return "Subject [id=" + id + ", name=" + name + "]";
 	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
 	
 	
 

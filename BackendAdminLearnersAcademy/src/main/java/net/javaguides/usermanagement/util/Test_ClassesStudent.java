@@ -5,9 +5,11 @@ import java.util.List;
 import net.javaguides.usermanagement.dao.ClassesDao;
 import net.javaguides.usermanagement.dao.StudentDao;
 import net.javaguides.usermanagement.dao.SubjectsDao;
+import net.javaguides.usermanagement.dao.TeacherDao;
 import net.javaguides.usermanagement.model.Classes;
 import net.javaguides.usermanagement.model.Student;
 import net.javaguides.usermanagement.model.Subject;
+import net.javaguides.usermanagement.model.Teacher;
 
 public class Test_ClassesStudent {
 
@@ -16,6 +18,7 @@ public class Test_ClassesStudent {
 		StudentDao studDao = new StudentDao();
 		ClassesDao classedDao = new ClassesDao();
 		SubjectsDao subdao = new SubjectsDao();
+		TeacherDao teachDao = new TeacherDao();
 		
 		//Create objects
 		Student stud1 = new Student("Stud 1");
@@ -31,6 +34,10 @@ public class Test_ClassesStudent {
 		Subject sub3 = new Subject("Sub3_class2");
 		
 		
+		Teacher teah1 = new Teacher("Teach1");
+		Teacher teah2 = new Teacher("Teach2");
+		Teacher teah3 = new Teacher("Teach3");
+		
 		
 		//Do associations
 		stud1.setClasses(c1);
@@ -40,6 +47,15 @@ public class Test_ClassesStudent {
 		sub1.setClasses(c1);
 		sub2.setClasses(c1);
 		sub3.setClasses(c2);
+		
+		sub3.setTeacher(teah3);
+		sub2.setTeacher(teah2);
+		sub1.setTeacher(teah3);
+		
+		
+		teah2.getSubjectList().add(sub2);
+		teah3.getSubjectList().add(sub3);
+		teah3.getSubjectList().add(sub1);
 		
 		
 		
@@ -61,9 +77,15 @@ public class Test_ClassesStudent {
 		studDao.saveStudent(stud2);
 		studDao.saveStudent(stud3);
 		
+		teachDao.saveTeacher(teah3);
+		teachDao.saveTeacher(teah2);
+		teachDao.saveTeacher(teah1);
+		
 		subdao.saveSubject(sub1);
 		subdao.saveSubject(sub2);
 		subdao.saveSubject(sub3);
+		
+		
 		
 		
 		// Get entities
@@ -72,6 +94,11 @@ public class Test_ClassesStudent {
 		
 		
 		allStudentsForParticularClass.forEach((obj) -> System.out.println(obj[0] + "   " + obj[1]));
+		
+		System.out.println("All Teachers");
+		List<Teacher> allTeacher = teachDao.getAllTeacher();
+		
+		allTeacher.forEach(System.out::println);
 
 	}
 
