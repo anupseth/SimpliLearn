@@ -57,9 +57,9 @@ public class Test_ClassesStudent {
 		classedDao.saveClasses(c2);
 		classedDao.saveClasses(c3);
 		
-		studDao.saveUser(stud1);
-		studDao.saveUser(stud2);
-		studDao.saveUser(stud3);
+		studDao.saveStudent(stud1);
+		studDao.saveStudent(stud2);
+		studDao.saveStudent(stud3);
 		
 		subdao.saveSubject(sub1);
 		subdao.saveSubject(sub2);
