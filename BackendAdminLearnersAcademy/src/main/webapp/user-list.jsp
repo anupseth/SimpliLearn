@@ -11,7 +11,7 @@
 <hr>
 		<h1>User Management</h1>
         <h2>
-        	<a href="new">Add New User</a>
+        	<a href="addStudent">Add Students to class</a>
         	&nbsp;&nbsp;&nbsp;
         	<a href="list">List All Users</a>
         	

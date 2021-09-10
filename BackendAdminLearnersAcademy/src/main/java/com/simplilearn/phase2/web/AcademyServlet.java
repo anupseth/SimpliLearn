@@ -1,6 +1,7 @@
 package com.simplilearn.phase2.web;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.internal.build.AllowSysOut;
 
 import com.simplilearn.phase2.dao.ClassesDao;
@@ -26,6 +29,7 @@ import com.simplilearn.phase2.model.Student;
 import com.simplilearn.phase2.model.Subject;
 import com.simplilearn.phase2.model.Teacher;
 import com.simplilearn.phase2.model.User;
+import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
  * ControllerServlet.java This servlet acts as a page controller for the
@@ -38,14 +42,17 @@ import com.simplilearn.phase2.model.User;
 public class AcademyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDao userDao;
+	private ClassesDao classedDao;
+	private StudentDao studDao;
+	private SubjectsDao subdao;
+	private TeacherDao teachDao;
 
 	public void init() {
 		userDao = new UserDao();
-
-		StudentDao studDao = new StudentDao();
-		ClassesDao classedDao = new ClassesDao();
-		SubjectsDao subdao = new SubjectsDao();
-		TeacherDao teachDao = new TeacherDao();
+		studDao = new StudentDao();
+		classedDao = new ClassesDao();
+		subdao = new SubjectsDao();
+		teachDao = new TeacherDao();
 
 		// Create Entities
 
@@ -56,14 +63,12 @@ public class AcademyServlet extends HttpServlet {
 		List<Classes> classesList = Arrays.asList(new Classes("Class 5"), new Classes("Class 6"),
 				new Classes("Class 7"));
 
-
 		List<Subject> subjectList = Arrays.asList(new Subject("English"), new Subject("Hindi"), new Subject("Maths"),
 				new Subject("Science"), new Subject("Geography"), new Subject("History"), new Subject("Computer"),
 				new Subject("Social Science"));
 
-
-		List<Teacher> teacherList = Arrays.asList(new Teacher("Ms Renuka"),new Teacher("Mr Vinod"),new Teacher("Ms Sarika"),
-				new Teacher("Mr Anand"), new Teacher("Mr Jai"), new Teacher("Ms Aishwarya"));
+		List<Teacher> teacherList = Arrays.asList(new Teacher("Ms Renuka"), new Teacher("Mr Vinod"),
+				new Teacher("Ms Sarika"), new Teacher("Mr Anand"), new Teacher("Mr Jai"), new Teacher("Ms Aishwarya"));
 
 		// Saving entities
 		studList.forEach((stud) -> studDao.saveStudent(stud));
@@ -86,6 +91,12 @@ public class AcademyServlet extends HttpServlet {
 			switch (action) {
 			case "/new":
 				showNewForm(request, response);
+				break;
+			case "/addStudent":
+				showAddStudentForm(request, response);
+				break;
+			case "/insertStudent":
+				insertStudent(request, response);
 				break;
 			case "/insert":
 				insertUser(request, response);
@@ -113,6 +124,49 @@ public class AcademyServlet extends HttpServlet {
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
 		}
+	}
+
+	private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String classId = request.getParameter("classesList");
+		System.out.println("....................---->   carlist " + classId);// studentsList
+
+		String studentId = request.getParameter("studentsList");
+		System.out.println("....................---->   carlist " + studentId);
+
+		Transaction transaction = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			// save the student object
+			Classes classes = session.get(Classes.class, Integer.parseInt(classId));
+			Student student = session.get(Student.class, Integer.parseInt(studentId));
+
+			student.setClasses(classes);
+			classes.getStudents().add(student);
+
+			session.save(classes);
+			session.save(student);
+
+			// commit transaction
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		response.sendRedirect("addStudent");
+	}
+
+	private void showAddStudentForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setAttribute("classes", classedDao.getAllClasses());
+		request.setAttribute("students", studDao.getAllStudent());
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-student-form.jsp");
+		requestDispatcher.forward(request, response);
+
 	}
 
 	private void loginAdmin(HttpServletRequest request, HttpServletResponse response)
