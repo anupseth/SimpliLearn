@@ -3,6 +3,7 @@ package net.javaguides.usermanagement.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -15,9 +16,15 @@ import javax.servlet.http.HttpSession;
 
 import org.hibernate.internal.build.AllowSysOut;
 
+import net.javaguides.usermanagement.dao.ClassesDao;
 import net.javaguides.usermanagement.dao.StudentDao;
+import net.javaguides.usermanagement.dao.SubjectsDao;
+import net.javaguides.usermanagement.dao.TeacherDao;
 import net.javaguides.usermanagement.dao.UserDao;
+import net.javaguides.usermanagement.model.Classes;
 import net.javaguides.usermanagement.model.Student;
+import net.javaguides.usermanagement.model.Subject;
+import net.javaguides.usermanagement.model.Teacher;
 import net.javaguides.usermanagement.model.User;
 
 /**
@@ -34,20 +41,36 @@ public class UserServlet extends HttpServlet {
 
 	public void init() {
 		userDao = new UserDao();
-		
 
-		/*
-		 * StudentDao studDao = new StudentDao();
-		 * 
-		 * Student stud1 = new Student("Stud 1"); Student stud2 = new Student("Stud 2");
-		 * Student stud3 = new Student("Stud 3");
-		 * 
-		 * studDao.saveUser(stud1); studDao.saveUser(stud2); studDao.saveUser(stud3);
-		 * 
-		 * List<Student> allUser = studDao.getAllStudent();
-		 * 
-		 * System.out.println(" "); allUser.forEach(System.out::println);
-		 */
+		StudentDao studDao = new StudentDao();
+		ClassesDao classedDao = new ClassesDao();
+		SubjectsDao subdao = new SubjectsDao();
+		TeacherDao teachDao = new TeacherDao();
+
+		// Create Entities
+
+		List<Student> studList = Arrays.asList(new Student("Anil"), new Student("Sunil"), new Student("Mathew"),
+				new Student("Sunita"), new Student("Anya"), new Student("Shilpa"), new Student("Naresh"),
+				new Student("Aachal"), new Student("Manish"), new Student("Swati"));
+
+		List<Classes> classesList = Arrays.asList(new Classes("Class 5"), new Classes("Class 6"),
+				new Classes("Class 7"));
+
+
+		List<Subject> subjectList = Arrays.asList(new Subject("English"), new Subject("Hindi"), new Subject("Maths"),
+				new Subject("Science"), new Subject("Geography"), new Subject("History"), new Subject("Computer"),
+				new Subject("Social Science"));
+
+
+		List<Teacher> teacherList = Arrays.asList(new Teacher("Ms Renuka"),new Teacher("Mr Vinod"),new Teacher("Ms Sarika"),
+				new Teacher("Mr Anand"), new Teacher("Mr Jai"), new Teacher("Ms Aishwarya"));
+
+		// Saving entities
+		studList.forEach((stud) -> studDao.saveStudent(stud));
+		classesList.forEach((classes) -> classedDao.saveClasses(classes));
+		subjectList.forEach((subject) -> subdao.saveSubject(subject));
+		teacherList.forEach((teacher) -> teachDao.saveTeacher(teacher));
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
