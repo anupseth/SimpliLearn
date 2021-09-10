@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import net.javaguides.usermanagement.model.User;
+import net.javaguides.usermanagement.model.Subject;
 import net.javaguides.usermanagement.util.HibernateUtil;
 
 /**
@@ -14,20 +15,20 @@ import net.javaguides.usermanagement.util.HibernateUtil;
  * @author Anup Seth
  *
  */
-public class UserDao {
+public class SubjectsDao {
 
 	/**
 	 * Save User
 	 * 
 	 * @param user
 	 */
-	public void saveUser(User user) {
+	public void saveSubject(Subject subject) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.save(user);
+			session.save(subject);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -41,15 +42,15 @@ public class UserDao {
 	/**
 	 * Update User
 	 * 
-	 * @param user
+	 * @param subject
 	 */
-	public void updateUser(User user) {
+	public void updateSubject(Subject subject) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.update(user);
+			session.update(subject);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -65,7 +66,7 @@ public class UserDao {
 	 * 
 	 * @param id
 	 */
-	public void deleteUser(int id) {
+	public void deleteSubject(int id) {
 
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -73,9 +74,9 @@ public class UserDao {
 			transaction = session.beginTransaction();
 
 			// Delete a user object
-			User user = session.get(User.class, id);
-			if (user != null) {
-				session.delete(user);
+			Subject subject = session.get(Subject.class, id);
+			if (subject != null) {
+				session.delete(subject);
 				System.out.println("user is deleted");
 			}
 
@@ -95,15 +96,15 @@ public class UserDao {
 	 * @param id
 	 * @return
 	 */
-	public User getUser(int id) {
+	public Subject getSubject(int id) {
 
 		Transaction transaction = null;
-		User user = null;
+		Subject subject = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
-			user = session.get(User.class, id);
+			subject = session.get(Subject.class, id);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -112,7 +113,7 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return user;
+		return subject;
 	}
 
 	/**
@@ -121,17 +122,17 @@ public class UserDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<User> getAllUser() {
+	public List<Subject> getAllSubject() {
 
 		Transaction transaction = null;
-		List<User> listOfUser = null;
+		List<Subject> listOfSubjects = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
 
-			listOfUser = session.createQuery("from User").getResultList();
-
+			 Query<Subject> createQuery = session.createQuery("FROM Subject",Subject.class);
+			 listOfSubjects = createQuery.getResultList();
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -140,6 +141,6 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return listOfUser;
+		return listOfSubjects;
 	}
 }

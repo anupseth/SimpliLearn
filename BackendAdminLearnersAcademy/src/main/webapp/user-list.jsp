@@ -7,6 +7,8 @@
 </head>
 <body>
 	<center>
+		<h1 style="color: blue;">Welcome To Learners Academy</h1>
+<hr>
 		<h1>User Management</h1>
         <h2>
         	<a href="new">Add New User</a>

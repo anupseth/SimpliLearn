@@ -8,11 +8,15 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import net.javaguides.usermanagement.model.Classes;
+import net.javaguides.usermanagement.model.Student;
+import net.javaguides.usermanagement.model.Subject;
+import net.javaguides.usermanagement.model.Teacher;
 import net.javaguides.usermanagement.model.User;
 
 /**
  * Java based configuration
- * @author ramesh Fadatare
+ * @author Anup Seth
  *
  */
 public class HibernateUtil {
@@ -26,7 +30,7 @@ public class HibernateUtil {
 				// Hibernate settings equivalent to hibernate.cfg.xml's properties
 				Properties settings = new Properties();
 				settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-				settings.put(Environment.URL, "jdbc:mysql://localhost:3306/demo?useSSL=false");
+				settings.put(Environment.URL, "jdbc:mysql://localhost:3306/demo?useSSL=false&allowPublicKeyRetrieval=true");
 				settings.put(Environment.USER, "root");
 				settings.put(Environment.PASS, "Temp4now!");
 				settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
@@ -39,6 +43,10 @@ public class HibernateUtil {
 
 				configuration.setProperties(settings);
 				configuration.addAnnotatedClass(User.class);
+				configuration.addAnnotatedClass(Student.class);
+				configuration.addAnnotatedClass(Classes.class);
+				configuration.addAnnotatedClass(Teacher.class);
+				configuration.addAnnotatedClass(Subject.class);
 
 				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 						.applySettings(configuration.getProperties()).build();

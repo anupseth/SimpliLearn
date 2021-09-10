@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/Javaee 
 		http://xmlns.jcp.org/xml/ns/Javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>User Management Web Application</display-name>
+	<display-name>Backend Admin Learners Academy</display-name>
 
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>

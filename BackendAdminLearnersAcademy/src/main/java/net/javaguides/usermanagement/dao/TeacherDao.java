@@ -2,10 +2,11 @@ package net.javaguides.usermanagement.dao;
 
 import java.util.List;
 
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import net.javaguides.usermanagement.model.User;
+import net.javaguides.usermanagement.model.Teacher;
 import net.javaguides.usermanagement.util.HibernateUtil;
 
 /**
@@ -14,20 +15,20 @@ import net.javaguides.usermanagement.util.HibernateUtil;
  * @author Anup Seth
  *
  */
-public class UserDao {
+public class TeacherDao {
 
 	/**
 	 * Save User
 	 * 
 	 * @param user
 	 */
-	public void saveUser(User user) {
+	public void saveUser(Teacher student) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.save(user);
+			session.save(student);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -43,7 +44,7 @@ public class UserDao {
 	 * 
 	 * @param user
 	 */
-	public void updateUser(User user) {
+	public void updateUser(Teacher user) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
@@ -73,7 +74,7 @@ public class UserDao {
 			transaction = session.beginTransaction();
 
 			// Delete a user object
-			User user = session.get(User.class, id);
+			Teacher user = session.get(Teacher.class, id);
 			if (user != null) {
 				session.delete(user);
 				System.out.println("user is deleted");
@@ -95,15 +96,15 @@ public class UserDao {
 	 * @param id
 	 * @return
 	 */
-	public User getUser(int id) {
+	public Teacher getUser(int id) {
 
 		Transaction transaction = null;
-		User user = null;
+		Teacher user = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
-			user = session.get(User.class, id);
+			user = session.get(Teacher.class, id);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -121,16 +122,16 @@ public class UserDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<User> getAllUser() {
+	public List<Teacher> getAllUser() {
 
 		Transaction transaction = null;
-		List<User> listOfUser = null;
+		List<Teacher> listOfUser = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
 
-			listOfUser = session.createQuery("from User").getResultList();
+			listOfUser = session.createQuery("from Teacher").getResultList();
 
 			// commit transaction
 			transaction.commit();

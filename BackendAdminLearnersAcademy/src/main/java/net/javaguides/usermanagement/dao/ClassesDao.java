@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import net.javaguides.usermanagement.model.User;
+import net.javaguides.usermanagement.model.Classes;
+import net.javaguides.usermanagement.model.Student;
+import net.javaguides.usermanagement.model.Subject;
 import net.javaguides.usermanagement.util.HibernateUtil;
 
 /**
@@ -14,14 +17,14 @@ import net.javaguides.usermanagement.util.HibernateUtil;
  * @author Anup Seth
  *
  */
-public class UserDao {
+public class ClassesDao {
 
 	/**
 	 * Save User
 	 * 
 	 * @param user
 	 */
-	public void saveUser(User user) {
+	public void saveClasses(Classes user) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
@@ -43,7 +46,7 @@ public class UserDao {
 	 * 
 	 * @param user
 	 */
-	public void updateUser(User user) {
+	public void updateUser(Classes user) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
@@ -73,9 +76,9 @@ public class UserDao {
 			transaction = session.beginTransaction();
 
 			// Delete a user object
-			User user = session.get(User.class, id);
-			if (user != null) {
-				session.delete(user);
+			Classes classes = session.get(Classes.class, id);
+			if (classes != null) {
+				session.delete(classes);
 				System.out.println("user is deleted");
 			}
 
@@ -95,15 +98,15 @@ public class UserDao {
 	 * @param id
 	 * @return
 	 */
-	public User getUser(int id) {
+	public Classes getClass(int id) {
 
 		Transaction transaction = null;
-		User user = null;
+		Classes classes = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
-			user = session.get(User.class, id);
+			classes = session.get(Classes.class, id);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -112,7 +115,7 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return user;
+		return classes;
 	}
 
 	/**
@@ -121,16 +124,16 @@ public class UserDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<User> getAllUser() {
+	public List<Classes> getAllClasses() {
 
 		Transaction transaction = null;
-		List<User> listOfUser = null;
+		List<Classes> listOfClasses = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
 
-			listOfUser = session.createQuery("from User").getResultList();
+			listOfClasses = session.createQuery("from Classes").getResultList();
 
 			// commit transaction
 			transaction.commit();
@@ -140,6 +143,53 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return listOfUser;
+		return listOfClasses;
+	}
+
+	public List<Subject> executeNamedQueries() {
+
+		Transaction transaction = null;
+		List<Subject> listOfStudent = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			// get an user object
+			Query<Subject> namedQuery = session.createNamedQuery("GetAllSubjectsForAStudent", Subject.class);
+			namedQuery.setParameter("id", 1);
+			listOfStudent = namedQuery.getResultList();
+			// commit transaction
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+		return listOfStudent;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> executeNamedQueriesMultipleTableAsResult() {
+
+		Transaction transaction = null;
+		List<Object[]> listOfStudent = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			// get an user object
+			Query namedQuery = session.createNamedQuery("GetAllSubjectsAndClassForAStudent");
+			namedQuery.setParameter("id", 1);
+			listOfStudent = namedQuery.getResultList();
+			// commit transaction
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+		return listOfStudent;
+
 	}
 }

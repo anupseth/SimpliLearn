@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import net.javaguides.usermanagement.model.User;
+import net.javaguides.usermanagement.model.Student;
 import net.javaguides.usermanagement.util.HibernateUtil;
 
 /**
@@ -14,20 +15,20 @@ import net.javaguides.usermanagement.util.HibernateUtil;
  * @author Anup Seth
  *
  */
-public class UserDao {
+public class StudentDao {
 
 	/**
 	 * Save User
 	 * 
 	 * @param user
 	 */
-	public void saveUser(User user) {
+	public void saveUser(Student student) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.save(user);
+			session.save(student);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -41,15 +42,15 @@ public class UserDao {
 	/**
 	 * Update User
 	 * 
-	 * @param user
+	 * @param student
 	 */
-	public void updateUser(User user) {
+	public void updateStudent(Student student) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// save the student object
-			session.update(user);
+			session.update(student);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -73,9 +74,9 @@ public class UserDao {
 			transaction = session.beginTransaction();
 
 			// Delete a user object
-			User user = session.get(User.class, id);
-			if (user != null) {
-				session.delete(user);
+			Student student = session.get(Student.class, id);
+			if (student != null) {
+				session.delete(student);
 				System.out.println("user is deleted");
 			}
 
@@ -95,15 +96,15 @@ public class UserDao {
 	 * @param id
 	 * @return
 	 */
-	public User getUser(int id) {
+	public Student getStudent(int id) {
 
 		Transaction transaction = null;
-		User user = null;
+		Student student = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
-			user = session.get(User.class, id);
+			student = session.get(Student.class, id);
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -112,7 +113,7 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return user;
+		return student;
 	}
 
 	/**
@@ -121,17 +122,17 @@ public class UserDao {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<User> getAllUser() {
+	public List<Student> getAllStudent() {
 
 		Transaction transaction = null;
-		List<User> listOfUser = null;
+		List<Student> listOfStudent = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
 			transaction = session.beginTransaction();
 			// get an user object
 
-			listOfUser = session.createQuery("from User").getResultList();
-
+			 Query<Student> createQuery = session.createQuery("FROM Student",Student.class);
+			 listOfStudent = createQuery.getResultList();
 			// commit transaction
 			transaction.commit();
 		} catch (Exception e) {
@@ -140,6 +141,33 @@ public class UserDao {
 			}
 			e.printStackTrace();
 		}
-		return listOfUser;
+		return listOfStudent;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getAllStudentsForParticularClass(){
+		
+		Transaction transaction = null;
+		List<Object[]> listOfStudent = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			// get an user object
+
+			
+			 @SuppressWarnings("rawtypes")
+			 Query namedQuery = session.createNamedQuery("findAllStudentInClass");
+			 namedQuery.setParameter("id", 1);
+			 listOfStudent = namedQuery.getResultList();
+			// commit transaction
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+		return listOfStudent;
+		
 	}
 }
