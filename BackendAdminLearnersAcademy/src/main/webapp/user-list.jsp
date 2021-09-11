@@ -13,7 +13,11 @@
         <h2>
         	<a href="addStudent">Add Students to class</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="list">List All Users</a>
+        	<a href="addSubject">Add Subjects to class</a>
+        	&nbsp;&nbsp;&nbsp;
+        	<a href="addTeacher">Add Teachers to Subjects</a>
+        	&nbsp;&nbsp;&nbsp;
+        	<a href="list">Show Class report</a>
         	
         </h2>
 	</center>

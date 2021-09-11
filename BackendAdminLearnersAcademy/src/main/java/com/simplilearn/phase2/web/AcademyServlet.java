@@ -14,11 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.internal.build.AllowSysOut;
 
+import com.simplilearn.phase2.dao.AssociationDao;
 import com.simplilearn.phase2.dao.ClassesDao;
 import com.simplilearn.phase2.dao.StudentDao;
 import com.simplilearn.phase2.dao.SubjectsDao;
@@ -60,8 +62,8 @@ public class AcademyServlet extends HttpServlet {
 				new Student("Sunita"), new Student("Anya"), new Student("Shilpa"), new Student("Naresh"),
 				new Student("Aachal"), new Student("Manish"), new Student("Swati"));
 
-		List<Classes> classesList = Arrays.asList(new Classes("Class 5"), new Classes("Class 6"),
-				new Classes("Class 7"));
+		List<Classes> classesList = Arrays.asList(new Classes("Class A"), new Classes("Class B"),
+				new Classes("Class C"));
 
 		List<Subject> subjectList = Arrays.asList(new Subject("English"), new Subject("Hindi"), new Subject("Maths"),
 				new Subject("Science"), new Subject("Geography"), new Subject("History"), new Subject("Computer"),
@@ -98,6 +100,12 @@ public class AcademyServlet extends HttpServlet {
 			case "/insertStudent":
 				insertStudent(request, response);
 				break;
+			case "/addSubject":
+				showAddSubjectsForm(request, response);
+				break;
+			case "/insertSubject":
+				insertSubject(request, response);
+				break;
 			case "/insert":
 				insertUser(request, response);
 				break;
@@ -125,37 +133,28 @@ public class AcademyServlet extends HttpServlet {
 			throw new ServletException(ex);
 		}
 	}
+	
+	private void insertSubject(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String classId = request.getParameter("classesList");
+		String subjectId = request.getParameter("subjectsList");
+		AssociationDao.saveSubjectClasses(classId, subjectId);
+		response.sendRedirect("addSubject");
+	}
+
+	private void showAddSubjectsForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setAttribute("classes", classedDao.getAllClasses());
+		request.setAttribute("subjects", subdao.getAllSubject());
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-subject-form.jsp");
+		requestDispatcher.forward(request, response);
+
+	}
 
 	private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String classId = request.getParameter("classesList");
-		System.out.println("....................---->   carlist " + classId);// studentsList
-
 		String studentId = request.getParameter("studentsList");
-		System.out.println("....................---->   carlist " + studentId);
-
-		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
-			// save the student object
-			Classes classes = session.get(Classes.class, Integer.parseInt(classId));
-			Student student = session.get(Student.class, Integer.parseInt(studentId));
-
-			student.setClasses(classes);
-			classes.getStudents().add(student);
-
-			session.save(classes);
-			session.save(student);
-
-			// commit transaction
-			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			e.printStackTrace();
-		}
-
+		AssociationDao.saveStudClasses(classId, studentId);
 		response.sendRedirect("addStudent");
 	}
 

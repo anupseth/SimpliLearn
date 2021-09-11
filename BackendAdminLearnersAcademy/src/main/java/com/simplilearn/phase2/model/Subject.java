@@ -20,11 +20,11 @@ public class Subject {
 	@Column(name = "name")
 	protected String name;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "fk_class")
 	private Classes classes; 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "fk_teacher")
 	private Teacher teacher;
 	

@@ -10,6 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 	<center>
 		<h1 style="color: blue;">Welcome To Learners Academy</h1>
 <hr>
@@ -30,7 +31,7 @@
 
 
 
-		<form action="insertStudent" method="post">
+		<form action="insertSubject" method="post">
 
 			<table border="1" cellpadding="5">
 
@@ -46,9 +47,9 @@
 				</tr>
 
 				<tr>
-					<th>Student</th>
-					<td><select name="studentsList">
-							<c:forEach var="stu" items="${students}">
+					<th>Subject</th>
+					<td><select name="subjectsList">
+							<c:forEach var="stu" items="${subjects}">
 								<option value="<c:out value='${stu.id}' />">
 									<c:out value='${stu.name}' />
 								</option>
@@ -56,7 +57,7 @@
 				</tr>
 				
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="Add Student"></td>
+					<td colspan="2" align="center"><input type="submit" value="Add Subject"></td>
 				</tr>
 			</table>
 

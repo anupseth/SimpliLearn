@@ -60,9 +60,9 @@ public class Test_ClassesStudent {
 		
 		
 		
-		c1.getStudents().add(stud1);
-		c1.getStudents().add(stud2);
-		c2.getStudents().add(stud3);
+//		c1.getStudents().add(stud1);
+//		c1.getStudents().add(stud2);
+//		c2.getStudents().add(stud3);
 		
 		c1.getSubjects().add(sub1);
 		c1.getSubjects().add(sub2);
