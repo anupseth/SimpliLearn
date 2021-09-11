@@ -106,6 +106,12 @@ public class AcademyServlet extends HttpServlet {
 			case "/insertSubject":
 				insertSubject(request, response);
 				break;
+			case "/addTeacher":
+				showAddTeachersForm(request, response);
+				break;
+			case "/insertTeacher":
+				insertTeacher(request, response);
+				break;
 			case "/insert":
 				insertUser(request, response);
 				break;
@@ -132,6 +138,23 @@ public class AcademyServlet extends HttpServlet {
 		} catch (SQLException ex) {
 			throw new ServletException(ex);
 		}
+	}
+	
+	private void insertTeacher(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String teacherId = request.getParameter("teachersList");
+		String subjectId = request.getParameter("subjectsList");
+		AssociationDao.saveSubjectTeachers(teacherId, subjectId);
+		response.sendRedirect("addTeacher");
+	}
+
+	private void showAddTeachersForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		request.setAttribute("subjects", subdao.getAllSubject());
+		request.setAttribute("teachers", teachDao.getAllTeacher());
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-teacher-form.jsp");
+		requestDispatcher.forward(request, response);
+
 	}
 	
 	private void insertSubject(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -177,7 +200,7 @@ public class AcademyServlet extends HttpServlet {
 		String p = request.getParameter("userPass");
 
 		if (p.equals("servlet")) {
-			RequestDispatcher rd = request.getRequestDispatcher("list");
+			RequestDispatcher rd = request.getRequestDispatcher("addStudent");
 			HttpSession session = request.getSession();
 			session.setAttribute("userName", n);
 			rd.forward(request, response);

@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import com.simplilearn.phase2.model.Classes;
 import com.simplilearn.phase2.model.Student;
 import com.simplilearn.phase2.model.Subject;
+import com.simplilearn.phase2.model.Teacher;
 import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
@@ -71,6 +72,32 @@ public class AssociationDao {
 			classes.getSubjects().add(subject);
 
 			session.save(classes);
+			session.save(subject);
+
+			// commit transaction
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static void saveSubjectTeachers(String teacherId, String subjectId) {
+		Transaction transaction = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			// start a transaction
+			transaction = session.beginTransaction();
+			// save the student object
+			Teacher teacher = session.get(Teacher.class, Integer.parseInt(teacherId));
+			Subject subject = session.get(Subject.class, Integer.parseInt(subjectId));
+
+			subject.setTeacher(teacher);;
+			teacher.getSubjectList().add(subject);
+
+			session.save(teacher);
 			session.save(subject);
 
 			// commit transaction
