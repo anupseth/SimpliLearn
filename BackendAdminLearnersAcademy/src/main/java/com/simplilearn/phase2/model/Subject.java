@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Subject {
 	
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -20,11 +22,11 @@ public class Subject {
 	@Column(name = "name")
 	protected String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_class")
 	private Classes classes; 
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_teacher")
 	private Teacher teacher;
 	

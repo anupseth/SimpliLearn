@@ -12,7 +12,6 @@ import com.simplilearn.phase2.model.Classes;
 import com.simplilearn.phase2.model.Student;
 import com.simplilearn.phase2.model.Subject;
 import com.simplilearn.phase2.model.Teacher;
-import com.simplilearn.phase2.model.User;
 
 /**
  * Java based configuration
@@ -45,7 +44,6 @@ public class HibernateUtil {
 				settings.put(Environment.HBM2DDL_AUTO, "create-drop");//create-drop
 
 				configuration.setProperties(settings);
-				configuration.addAnnotatedClass(User.class);
 				configuration.addAnnotatedClass(Student.class);
 				configuration.addAnnotatedClass(Classes.class);
 				configuration.addAnnotatedClass(Teacher.class);

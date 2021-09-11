@@ -27,6 +27,8 @@ import javax.persistence.NamedQuery;
 	)  
 public class Student {
 	
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -35,7 +37,7 @@ public class Student {
 	@Column(name = "name")
 	protected String name;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name="fk_classes")
 	private Classes classes; 
 	

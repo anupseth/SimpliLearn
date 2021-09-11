@@ -33,6 +33,9 @@ import javax.persistence.Table;
 })
 public class Classes {
 
+
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

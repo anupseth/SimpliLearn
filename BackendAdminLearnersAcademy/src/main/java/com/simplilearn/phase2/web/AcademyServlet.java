@@ -1,9 +1,7 @@
 package com.simplilearn.phase2.web;
 
 import java.io.IOException;
-
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,24 +12,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.internal.build.AllowSysOut;
 
 import com.simplilearn.phase2.dao.AssociationDao;
 import com.simplilearn.phase2.dao.ClassesDao;
 import com.simplilearn.phase2.dao.StudentDao;
 import com.simplilearn.phase2.dao.SubjectsDao;
 import com.simplilearn.phase2.dao.TeacherDao;
-import com.simplilearn.phase2.dao.UserDao;
 import com.simplilearn.phase2.model.Classes;
 import com.simplilearn.phase2.model.Student;
 import com.simplilearn.phase2.model.Subject;
 import com.simplilearn.phase2.model.Teacher;
-import com.simplilearn.phase2.model.User;
-import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
  * ControllerServlet.java This servlet acts as a page controller for the
@@ -43,14 +33,12 @@ import com.simplilearn.phase2.util.HibernateUtil;
 @WebServlet("/")
 public class AcademyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private UserDao userDao;
 	private ClassesDao classedDao;
 	private StudentDao studDao;
 	private SubjectsDao subdao;
 	private TeacherDao teachDao;
 
 	public void init() {
-		userDao = new UserDao();
 		studDao = new StudentDao();
 		classedDao = new ClassesDao();
 		subdao = new SubjectsDao();
@@ -89,78 +77,61 @@ public class AcademyServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String action = request.getServletPath();
 		System.out.println(" ------> Servlet path " + action);
-		try {
-			switch (action) {
-			case "/new":
-				showNewForm(request, response);
-				break;
-			case "/addStudent":
-				showAddStudentForm(request, response);
-				break;
-			case "/insertStudent":
-				insertStudent(request, response);
-				break;
-			case "/addSubject":
-				showAddSubjectsForm(request, response);
-				break;
-			case "/insertSubject":
-				insertSubject(request, response);
-				break;
-			case "/addTeacher":
-				showAddTeachersForm(request, response);
-				break;
-			case "/insertTeacher":
-				insertTeacher(request, response);
-				break;
-			case "/insert":
-				insertUser(request, response);
-				break;
-			case "/delete":
-				deleteUser(request, response);
-				break;
-			case "/edit":
-				showEditForm(request, response);
-				break;
-			case "/update":
-				updateUser(request, response);
-				break;
-			case "/list":
-				listUser(request, response);
-				break;
-			case "/login":
-				loginAdmin(request, response);
-				break;
-			default:
-				System.out.println(" Inside default case .......");
-				showLoginPage(request, response);
-				break;
-			}
-		} catch (SQLException ex) {
-			throw new ServletException(ex);
+		switch (action) {
+		case "/showReportForm":
+			showReportForm(request, response);
+			break;
+		case "/showReport":
+			showReport(request, response);
+			break;
+		case "/addStudent":
+			showAddStudentForm(request, response);
+			break;
+		case "/insertStudent":
+			insertStudent(request, response);
+			break;
+		case "/addSubject":
+			showAddSubjectsForm(request, response);
+			break;
+		case "/insertSubject":
+			insertSubject(request, response);
+			break;
+		case "/login":
+			loginAdmin(request, response);
+			break;
+		default:
+			System.out.println(" Inside default case .......");
+			showLoginPage(request, response);
+			break;
 		}
 	}
 	
-	private void insertTeacher(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String teacherId = request.getParameter("teachersList");
-		String subjectId = request.getParameter("subjectsList");
-		AssociationDao.saveSubjectTeachers(teacherId, subjectId);
-		response.sendRedirect("addTeacher");
+	private void showReport(HttpServletRequest request, HttpServletResponse response) {
+		String classId = request.getParameter("classesList");
+		
+		
+		Classes class1 = AssociationDao.getClassReport(classId);
+		
+		System.out.println("Students for class");
+		class1.getStudents().forEach(System.out::println);
+		
+		System.out.println("Subjects for class and their tacher");
+		class1.getSubjects().forEach((sub) -> {
+			System.out.println("Subject  = "+sub.getName() + "    Teacher ="+ sub.getTeacher().getName());
+		});
 	}
 
-	private void showAddTeachersForm(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		request.setAttribute("subjects", subdao.getAllSubject());
-		request.setAttribute("teachers", teachDao.getAllTeacher());
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-teacher-form.jsp");
+	private void showReportForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("classes", classedDao.getAllClasses());
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("show-report-form.jsp");
 		requestDispatcher.forward(request, response);
-
 	}
-	
+
 	private void insertSubject(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String classId = request.getParameter("classesList");
 		String subjectId = request.getParameter("subjectsList");
-		AssociationDao.saveSubjectClasses(classId, subjectId);
+		String teacherId = request.getParameter("teachersList");
+		AssociationDao.saveSubjectClasses(classId, subjectId, teacherId);
 		response.sendRedirect("addSubject");
 	}
 
@@ -169,6 +140,7 @@ public class AcademyServlet extends HttpServlet {
 
 		request.setAttribute("classes", classedDao.getAllClasses());
 		request.setAttribute("subjects", subdao.getAllSubject());
+		request.setAttribute("teachers", teachDao.getAllTeacher());
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-subject-form.jsp");
 		requestDispatcher.forward(request, response);
 
@@ -217,106 +189,5 @@ public class AcademyServlet extends HttpServlet {
 			throws ServletException, IOException {
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");
 		requestDispatcher.forward(request, response);
-	}
-
-	private void listUser(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
-
-		PrintWriter out = response.getWriter();
-
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			System.out.println(" listUser called .......");
-			List<User> listUser = userDao.getAllUser();
-			request.setAttribute("listUser", listUser);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
-			dispatcher.forward(request, response);
-		}
-
-	}
-
-	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
-			dispatcher.forward(request, response);
-		}
-	}
-
-	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			int id = Integer.parseInt(request.getParameter("id"));
-			User existingUser = userDao.getUser(id);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("user-form.jsp");
-			request.setAttribute("user", existingUser);
-			dispatcher.forward(request, response);
-		}
-	}
-
-	private void insertUser(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			String name = request.getParameter("name");
-			String email = request.getParameter("email");
-			String country = request.getParameter("country");
-			User newUser = new User(name, email, country);
-			userDao.saveUser(newUser);
-			response.sendRedirect("list");
-		}
-	}
-
-	private void updateUser(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-
-			int id = Integer.parseInt(request.getParameter("id"));
-			String name = request.getParameter("name");
-			String email = request.getParameter("email");
-			String country = request.getParameter("country");
-
-			User user = new User(id, name, email, country);
-			userDao.updateUser(user);
-			response.sendRedirect("list");
-		}
-	}
-
-	private void deleteUser(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
-
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession(false);
-		if (session != null && session.getAttribute("userName") == null) {
-			out.print("Please login first");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-
-			int id = Integer.parseInt(request.getParameter("id"));
-			userDao.deleteUser(id);
-			response.sendRedirect("list");
-		}
 	}
 }

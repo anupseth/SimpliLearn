@@ -1,10 +1,7 @@
 package com.simplilearn.phase2.dao;
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import com.simplilearn.phase2.model.Classes;
 import com.simplilearn.phase2.model.Student;
@@ -48,17 +45,9 @@ public class AssociationDao {
 			}
 			e.printStackTrace();
 		}
-
-//		Student student = studDao.getStudent(Integer.parseInt(studentId));
-//		Classes classes = classedDao.getClass(Integer.parseInt(classId));
-//		
-//		student.setClasses(classes);
-//		classes.getStudents().add(student);
-//		classedDao.saveClasses(classes);
-//		studDao.saveStudent(student);
 	}
 
-	public static void saveSubjectClasses(String classId, String subjectId) {
+	public static void saveSubjectClasses(String classId, String subjectId, String teacherId) {
 		
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -67,11 +56,19 @@ public class AssociationDao {
 			// save the student object
 			Classes classes = session.get(Classes.class, Integer.parseInt(classId));
 			Subject subject = session.get(Subject.class, Integer.parseInt(subjectId));
+			Teacher teacher = session.get(Teacher.class, Integer.parseInt(teacherId));
 
+			
+			
 			subject.setClasses(classes);
+			subject.setTeacher(teacher);
+			
+			teacher.getSubjectList().add(subject);
 			classes.getSubjects().add(subject);
 
+			session.save(teacher);
 			session.save(classes);
+			
 			session.save(subject);
 
 			// commit transaction
@@ -85,32 +82,33 @@ public class AssociationDao {
 		
 	}
 
-	public static void saveSubjectTeachers(String teacherId, String subjectId) {
+	public static Classes getClassReport(String classId) {
 		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			// start a transaction
-			transaction = session.beginTransaction();
+		//	transaction = session.beginTransaction();
 			// save the student object
-			Teacher teacher = session.get(Teacher.class, Integer.parseInt(teacherId));
-			Subject subject = session.get(Subject.class, Integer.parseInt(subjectId));
-
-			subject.setTeacher(teacher);;
-			teacher.getSubjectList().add(subject);
-
-			session.save(teacher);
-			session.save(subject);
-
+			Classes class1 = session.get(Classes.class, Integer.parseInt(classId));
+			
+			
+			class1.getStudents().forEach((stud)->{
+				stud.getName();
+			});
+			
+			class1.getSubjects().forEach((sub) -> {
+				sub.getTeacher();
+			});
 			// commit transaction
-			transaction.commit();
+		//	transaction.commit();
+			return class1;
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
 			e.printStackTrace();
 		}
+		return null;
 		
 	}
-
-	
 	
 }

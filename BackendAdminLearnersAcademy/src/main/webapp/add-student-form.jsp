@@ -17,11 +17,9 @@
         <h2>
         	<a href="addStudent">Add Students to class</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="addSubject">Add Subjects to class</a>
+        	<a href="addSubject">Add Subjects And Teacher to class</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="addTeacher">Add Teachers to Subjects</a>
-        	&nbsp;&nbsp;&nbsp;
-        	<a href="list">Show Class report</a>
+        	<a href="showReportForm">Show Class report</a>
         	
         </h2>
 	</center>

@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Teacher {
 	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

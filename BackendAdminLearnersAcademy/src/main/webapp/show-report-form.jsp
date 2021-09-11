@@ -18,9 +18,7 @@
         <h2>
         	<a href="addStudent">Add Students to class</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="addSubject">Add Subjects to class</a>
-        	&nbsp;&nbsp;&nbsp;
-        	<a href="addTeacher">Add Teachers to Subjects</a>
+        	<a href="addSubject">Add Subjects And Teacher to class</a>
         	&nbsp;&nbsp;&nbsp;
         	<a href="list">Show Class report</a>
         	
@@ -31,33 +29,23 @@
 
 
 
-		<form action="insertTeacher" method="post">
+		<form action="showReport" method="post">
 
 			<table border="1" cellpadding="5">
 
 				<tr>
-					<th>Teacher</th>
-					<td><select name="teachersList">
-							<c:forEach var="cls" items="${teachers}">
+					<th>Class</th>
+					<td><select name="classesList">
+							<c:forEach var="cls" items="${classes}">
 								<option value="<c:out value='${cls.id}' />">
 									<c:out value='${cls.name}' />
 								</option>
 							</c:forEach>
 					</select></td>
 				</tr>
-
-				<tr>
-					<th>Subject</th>
-					<td><select name="subjectsList">
-							<c:forEach var="stu" items="${subjects}">
-								<option value="<c:out value='${stu.id}' />">
-									<c:out value='${stu.name}' />
-								</option>
-							</c:forEach></td>
-				</tr>
 				
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="Add Teacher"></td>
+					<td colspan="2" align="center"><input type="submit" value="Submit"></td>
 				</tr>
 			</table>
 

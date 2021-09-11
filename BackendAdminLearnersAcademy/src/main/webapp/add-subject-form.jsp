@@ -18,9 +18,7 @@
         <h2>
         	<a href="addStudent">Add Students to class</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="addSubject">Add Subjects to class</a>
-        	&nbsp;&nbsp;&nbsp;
-        	<a href="addTeacher">Add Teachers to Subjects</a>
+        	<a href="addSubject">Add Subjects And Teacher to class</a>
         	&nbsp;&nbsp;&nbsp;
         	<a href="list">Show Class report</a>
         	
@@ -57,7 +55,18 @@
 				</tr>
 				
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="Add Subject"></td>
+					<th>Teacher</th>
+					<td><select name="teachersList">
+							<c:forEach var="tea" items="${teachers}">
+								<option value="<c:out value='${tea.id}' />">
+									<c:out value='${tea.name}' />
+								</option>
+							</c:forEach>
+					</select></td>
+				</tr>
+				
+				<tr>
+					<td colspan="2" align="center"><input type="submit" value="Add"></td>
 				</tr>
 			</table>
 
