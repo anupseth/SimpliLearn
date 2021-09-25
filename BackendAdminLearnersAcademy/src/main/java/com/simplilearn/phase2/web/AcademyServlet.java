@@ -105,62 +105,168 @@ public class AcademyServlet extends HttpServlet {
 			break;
 		}
 	}
-	
+
 	private void showReport(HttpServletRequest request, HttpServletResponse response) {
-		String classId = request.getParameter("classesList");
-		
-		
-		Classes class1 = AssociationDao.getClassReport(classId);
-		
-		System.out.println("Students for class");
-		class1.getStudents().forEach(System.out::println);
-		
-		System.out.println("Subjects for class and their tacher");
-		class1.getSubjects().forEach((sub) -> {
-			System.out.println("Subject  = "+sub.getName() + "    Teacher ="+ sub.getTeacher().getName());
-		});
+
+		try {
+
+			PrintWriter out = response.getWriter();
+			boolean loggedin = checkIfUserLoggedIn(request);
+
+			if (!loggedin) {
+
+				out.print("Please login First!");
+				RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+				rd.include(request, response);
+
+			} else {
+
+				String classId = request.getParameter("classesList");
+
+				Classes class1 = AssociationDao.getClassReport(classId);
+//		
+//		System.out.println("Students for class");
+//		class1.getStudents().forEach(System.out::println);
+//		
+//		System.out.println("Subjects for class and their tacher");
+//		class1.getSubjects().forEach((sub) -> {
+//			System.out.println("Subject  = "+sub.getName() + "    Teacher ="+ sub.getTeacher().getName());
+//		});
+
+				request.setAttribute("students", class1.getStudents());
+				request.setAttribute("subjects", class1.getSubjects());
+				request.setAttribute("selClass", class1);
+				request.setAttribute("classes", classedDao.getAllClasses());
+				request.setAttribute("showReport", true);
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("show-report-form.jsp");
+				requestDispatcher.forward(request, response);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private void showReportForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("classes", classedDao.getAllClasses());
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("show-report-form.jsp");
-		requestDispatcher.forward(request, response);
+	private void showReportForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+		boolean loggedin = checkIfUserLoggedIn(request);
+
+		if (!loggedin) {
+
+			out.print("Please login First!");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			rd.include(request, response);
+
+		} else {
+			request.setAttribute("classes", classedDao.getAllClasses());
+			request.setAttribute("showReport", false);
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("show-report-form.jsp");
+			requestDispatcher.forward(request, response);
+		}
 	}
 
 	private void insertSubject(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String classId = request.getParameter("classesList");
-		String subjectId = request.getParameter("subjectsList");
-		String teacherId = request.getParameter("teachersList");
-		AssociationDao.saveSubjectClasses(classId, subjectId, teacherId);
-		response.sendRedirect("addSubject");
+
+		PrintWriter out = response.getWriter();
+		boolean loggedin = checkIfUserLoggedIn(request);
+
+		if (!loggedin) {
+
+			out.print("Please login First!");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			try {
+				rd.include(request, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			String classId = request.getParameter("classesList");
+			String subjectId = request.getParameter("subjectsList");
+			String teacherId = request.getParameter("teachersList");
+			AssociationDao.saveSubjectClasses(classId, subjectId, teacherId);
+			response.sendRedirect("addSubject");
+		}
 	}
 
 	private void showAddSubjectsForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.setAttribute("classes", classedDao.getAllClasses());
-		request.setAttribute("subjects", subdao.getAllSubject());
-		request.setAttribute("teachers", teachDao.getAllTeacher());
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-subject-form.jsp");
-		requestDispatcher.forward(request, response);
+		PrintWriter out = response.getWriter();
+		boolean loggedin = checkIfUserLoggedIn(request);
+
+		if (!loggedin) {
+
+			out.print("Please login First!");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			rd.include(request, response);
+
+		} else {
+
+			request.setAttribute("classes", classedDao.getAllClasses());
+			request.setAttribute("subjects", subdao.getAllSubject());
+			request.setAttribute("teachers", teachDao.getAllTeacher());
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-subject-form.jsp");
+			requestDispatcher.forward(request, response);
+		}
 
 	}
 
 	private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String classId = request.getParameter("classesList");
-		String studentId = request.getParameter("studentsList");
-		AssociationDao.saveStudClasses(classId, studentId);
-		response.sendRedirect("addStudent");
+
+		PrintWriter out = response.getWriter();
+		boolean loggedin = checkIfUserLoggedIn(request);
+
+		if (!loggedin) {
+
+			out.print("Please login First!");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			try {
+				rd.include(request, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			String classId = request.getParameter("classesList");
+			String studentId = request.getParameter("studentsList");
+			AssociationDao.saveStudClasses(classId, studentId);
+			response.sendRedirect("addStudent");
+		}
 	}
 
 	private void showAddStudentForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.setAttribute("classes", classedDao.getAllClasses());
-		request.setAttribute("students", studDao.getAllStudent());
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-student-form.jsp");
-		requestDispatcher.forward(request, response);
+		PrintWriter out = response.getWriter();
+		boolean loggedin = checkIfUserLoggedIn(request);
 
+		if (!loggedin) {
+
+			out.print("Please login First!");
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			rd.include(request, response);
+
+		} else {
+			request.setAttribute("classes", classedDao.getAllClasses());
+			request.setAttribute("students", studDao.getAllStudent());
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("add-student-form.jsp");
+			requestDispatcher.forward(request, response);
+		}
+
+	}
+
+	private boolean checkIfUserLoggedIn(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("userName") != null)
+			return true;
+
+		return false;
 	}
 
 	private void loginAdmin(HttpServletRequest request, HttpServletResponse response)

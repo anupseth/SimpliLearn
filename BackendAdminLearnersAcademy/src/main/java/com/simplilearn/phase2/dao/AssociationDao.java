@@ -83,11 +83,8 @@ public class AssociationDao {
 	}
 
 	public static Classes getClassReport(String classId) {
-		Transaction transaction = null;
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-		//	transaction = session.beginTransaction();
-			// save the student object
+	
 			Classes class1 = session.get(Classes.class, Integer.parseInt(classId));
 			
 			
@@ -98,13 +95,8 @@ public class AssociationDao {
 			class1.getSubjects().forEach((sub) -> {
 				sub.getTeacher();
 			});
-			// commit transaction
-		//	transaction.commit();
 			return class1;
 		} catch (Exception e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
 			e.printStackTrace();
 		}
 		return null;
