@@ -11,7 +11,7 @@ import com.simplilearn.phase2.model.Teacher;
 import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
- * CRUD database operations
+ * CRUD database operations for Teacher entity
  * 
  * @author Anup Seth
  *

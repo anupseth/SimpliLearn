@@ -10,7 +10,7 @@ import com.simplilearn.phase2.model.Teacher;
 import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
- * CRUD database operations
+ * This Dao class handles Association operation
  * 
  * @author Anup Seth
  *
@@ -47,6 +47,12 @@ public class AssociationDao {
 		}
 	}
 
+	/**
+	 * 
+	 * @param classId
+	 * @param subjectId
+	 * @param teacherId
+	 */
 	public static void saveSubjectClasses(String classId, String subjectId, String teacherId) {
 		
 		Transaction transaction = null;
@@ -82,6 +88,12 @@ public class AssociationDao {
 		
 	}
 
+	
+	/**
+	 * 
+	 * @param classId
+	 * @return
+	 */
 	public static Classes getClassReport(String classId) {
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 	

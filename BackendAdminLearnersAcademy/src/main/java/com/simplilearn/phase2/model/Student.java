@@ -12,6 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+/**
+ * This is a POJO for students
+ * @author anups
+ *
+ */
 @Entity
 @NamedQueries(  
 	    {  

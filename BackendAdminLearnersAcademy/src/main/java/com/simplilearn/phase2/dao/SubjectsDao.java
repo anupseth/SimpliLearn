@@ -10,7 +10,7 @@ import com.simplilearn.phase2.model.Subject;
 import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
- * CRUD database operations
+ * CRUD database operations Subjects
  * 
  * @author Anup Seth
  *

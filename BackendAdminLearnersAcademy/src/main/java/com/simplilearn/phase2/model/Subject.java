@@ -9,6 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+/**
+ * Pojo for Subject
+ * @author anups
+ *
+ */
 @Entity
 public class Subject {
 	

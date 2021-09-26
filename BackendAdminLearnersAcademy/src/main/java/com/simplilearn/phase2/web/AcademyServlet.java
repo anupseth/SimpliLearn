@@ -73,6 +73,7 @@ public class AcademyServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getServletPath();
@@ -106,6 +107,11 @@ public class AcademyServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Shows Final Class report 
+	 * @param request
+	 * @param response
+	 */
 	private void showReport(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
@@ -156,6 +162,13 @@ public class AcademyServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Displays Class report Page
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showReportForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -176,6 +189,13 @@ public class AcademyServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Will assign subject to the class
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	private void insertSubject(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		boolean loggedin = checkIfUserLoggedIn(request);
@@ -196,6 +216,13 @@ public class AcademyServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * This method shows Add subjects page 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showAddSubjectsForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -218,6 +245,13 @@ public class AcademyServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * This method assigns Students to the class
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	private void insertStudent(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		boolean loggedin = checkIfUserLoggedIn(request);
@@ -237,6 +271,13 @@ public class AcademyServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * This method display add student page
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showAddStudentForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -258,6 +299,11 @@ public class AcademyServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * This method checks if user is logged in or not before accessing any links
+	 * @param request
+	 * @return
+	 */
 	private boolean checkIfUserLoggedIn(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 
@@ -267,6 +313,13 @@ public class AcademyServlet extends HttpServlet {
 		return false;
 	}
 
+	/**
+	 * This method handles the login of the admin
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	private void loginAdmin(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
@@ -288,6 +341,13 @@ public class AcademyServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * This method shows login page to the user.
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void showLoginPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("login.jsp");

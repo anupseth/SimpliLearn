@@ -10,7 +10,7 @@ import com.simplilearn.phase2.model.Student;
 import com.simplilearn.phase2.util.HibernateUtil;
 
 /**
- * CRUD database operations
+ * CRUD database operations Students
  * 
  * @author Anup Seth
  *

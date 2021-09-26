@@ -10,6 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+/**
+ * POJO for Teacher
+ * @author anups
+ *
+ */
 @Entity
 public class Teacher {
 	
