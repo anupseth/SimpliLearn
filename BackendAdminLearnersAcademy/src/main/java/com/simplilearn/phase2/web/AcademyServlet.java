@@ -2,6 +2,7 @@ package com.simplilearn.phase2.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -212,7 +213,10 @@ public class AcademyServlet extends HttpServlet {
 			String subjectId = request.getParameter("subjectsList");
 			String teacherId = request.getParameter("teachersList");
 			AssociationDao.saveSubjectClasses(classId, subjectId, teacherId);
-			response.sendRedirect("addSubject");
+			request.setAttribute("SucMsg", "Record Updated successfully at "+LocalTime.now());
+			//response.sendRedirect("addSubject");
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("addSubject");
+			requestDispatcher.forward(request, response);
 		}
 	}
 
@@ -267,7 +271,9 @@ public class AcademyServlet extends HttpServlet {
 			String classId = request.getParameter("classesList");
 			String studentId = request.getParameter("studentsList");
 			AssociationDao.saveStudClasses(classId, studentId);
-			response.sendRedirect("addStudent");
+			request.setAttribute("SucMsg", "Record Updated successfully at "+ LocalTime.now());
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("addStudent");
+			requestDispatcher.forward(request, response);
 		}
 	}
 

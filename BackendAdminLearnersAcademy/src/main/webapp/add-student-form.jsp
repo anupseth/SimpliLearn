@@ -62,7 +62,9 @@
 
 		</form>
 
-
+<c:if test="${requestScope.SucMsg != null }">
+	<c:out value="${requestScope.SucMsg }"> </c:out>
+</c:if>
 
 
 	</div>
