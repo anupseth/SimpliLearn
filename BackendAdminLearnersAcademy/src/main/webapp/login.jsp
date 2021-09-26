@@ -13,16 +13,34 @@
 		Academy</h1>
 	<hr>
 
-<c:if test="${ErrMsg != null}">
-	<h4 style="color: red;"> <c:out value='${ErrMsg}' /> </h4>
-</c:if>
+	<c:if test="${ErrMsg != null}">
+		<h4 style="color: red;">
+			<c:out value='${ErrMsg}' />
+		</h4>
+	</c:if>
 
+<div align="center">
 	<form action="login" method="post">
-		Name:<input type="text" name="userName" value="servlet"/><br /> Password:<input
-			type="password" name="userPass" value="servlet"/><br /> <input type="submit"
-			value="login" />
-	</form>
 
+		<table>
+			<tr>
+				<td>Name</td>
+				<td><input type="text" name="userName" value="servlet" /></td>
+			</tr>
+
+			<tr>
+				<td>Password</td>
+				<td><input type="password" name="userPass" value="servlet" /></td>
+			</tr>
+
+			<tr>
+				<td colspan="2" align="center"><input type="submit"
+					value="login" /></td>
+
+			</tr>
+		</table>
+	</form>
+</div>
 
 </body>
 </html>

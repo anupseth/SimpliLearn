@@ -78,7 +78,7 @@ public class ClassesDao {
 			Classes classes = session.get(Classes.class, id);
 			if (classes != null) {
 				session.delete(classes);
-				System.out.println("classes is deleted");
+				//System.out.println("classes is deleted");
 			}
 
 			// commit transaction

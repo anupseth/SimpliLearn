@@ -76,7 +76,7 @@ public class AcademyServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getServletPath();
-		System.out.println(" ------> Servlet path " + action);
+		//System.out.println(" ------> Servlet path " + action);
 		switch (action) {
 		case "/showReportForm":
 			showReportForm(request, response);
@@ -100,7 +100,7 @@ public class AcademyServlet extends HttpServlet {
 			loginAdmin(request, response);
 			break;
 		default:
-			System.out.println(" Inside default case .......");
+			//System.out.println(" Inside default case .......");
 			showLoginPage(request, response);
 			break;
 		}

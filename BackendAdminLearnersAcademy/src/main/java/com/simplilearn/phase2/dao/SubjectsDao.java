@@ -77,7 +77,7 @@ public class SubjectsDao {
 			Subject subject = session.get(Subject.class, id);
 			if (subject != null) {
 				session.delete(subject);
-				System.out.println("subject is deleted");
+				//System.out.println("subject is deleted");
 			}
 
 			// commit transaction
