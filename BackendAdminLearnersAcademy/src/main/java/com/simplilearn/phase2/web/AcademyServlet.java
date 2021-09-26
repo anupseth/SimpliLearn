@@ -270,8 +270,6 @@ public class AcademyServlet extends HttpServlet {
 	private void loginAdmin(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		PrintWriter out = response.getWriter();
-
 		String n = request.getParameter("userName");
 		String p = request.getParameter("userPass");
 
@@ -282,9 +280,9 @@ public class AcademyServlet extends HttpServlet {
 			session.setAttribute("classesFromSession", classedDao.getAllClasses());
 			rd.forward(request, response);
 		} else {
-			out.print("Sorry UserName or Password Error!");
-			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-			rd.include(request, response);
+			request.setAttribute("ErrMsg", "Sorry UserName or Password Error!");
+			RequestDispatcher rd = request.getRequestDispatcher("/");
+			rd.forward(request, response);
 
 		}
 
