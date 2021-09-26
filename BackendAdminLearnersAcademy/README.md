@@ -18,4 +18,4 @@ Admin credentials
 username : servlet
 password : servlet
 
-NOTE : Please modify the com.simplilearn.phase2.util.HibernateUtil file to sprcify sql details. Mainly URL, USER and PASS for the hibernate configuratoion 
+NOTE : Please modify the com.simplilearn.phase2.util.HibernateUtil file to specify sql details. Mainly URL, USER and PASS for the hibernate configuratoion 
