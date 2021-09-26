@@ -26,7 +26,9 @@
 
 	<div align="center">
 
-
+<c:if test="${ErrMsg != null}">
+	<h4 style="color: red;"> <c:out value='${ErrMsg}' /> </h4>
+</c:if>
 
 		<form action="insertStudent" method="post">
 
