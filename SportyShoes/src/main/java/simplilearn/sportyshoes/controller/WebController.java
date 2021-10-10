@@ -1,8 +1,5 @@
 package simplilearn.sportyshoes.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Base64;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
