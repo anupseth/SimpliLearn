@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1 align="center">Welcome to Sporty Shoes</h1>
+<hr>
+
+<table style="width: 100%">
+		<tbody align="center">
+		<tr>
+		    <td> <a href="/" style="font-size: medium;"> Home</a></td>
+			<td> <a href="/singup" style="font-size: medium;"> Sing up</a></td>
+			<td> <a href="#" style="font-size: medium;"> Admin Page</a></td>
+			<td th:if="${session.currentUser != null}"> <a href="/logout" style="font-size: medium;"> Log out</a></td>
+		</tr>
+		</tbody>
+	</table>
+
+<h3 align="center">Sing-up for Sporty Shoes</h3>
+
+
+<span th:if="${session.singupError != ''}" th:text="${session.singupError}" style="color: red;">Error</span>
+
+<form action="#" th:action="@{/singup}" th:object="${user}"
+		method="post">
+		<table style="width: 100%;margin-top: 5%;">
+			<tr style="display: none;" align="center">
+				<td>Name:</td>
+				<td><input type="number" th:field="*{id}" /></td>
+				<td th:if="${#fields.hasErrors('id')}" th:errors="*{id}"
+					style="color: red;">ID Error</td>
+			</tr>
+			<tr align="center">
+				<td>Username:</td>
+				<td><input type="text" th:field="*{username}" /></td>
+				<td th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+					style="color: red;">Usename error</td>
+			</tr>
+			<tr align="center">
+				<td>password:</td>
+				<td><input type="password" th:field="*{password}" /></td>
+				<td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+					style="color: red;">Password Error</td>
+			</tr>
+			
+			
+			
+		</table>
+		
+		<button type="submit" style="width: 10%; margin-left: 35%">Join Us</button>
+	</form>
+
+
+
+	
+
+</body>
+</html>
