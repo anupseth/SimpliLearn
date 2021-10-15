@@ -1,9 +1,14 @@
 package simplilearn.sportyshoes.entities;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Size;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,17 +20,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
+@Table(name = "Prod_Order")
+public class Order {
+	
 	@Id
 	@GeneratedValue
 	private Integer id;
 	
-	@Size(min = 5,message = "Username should be greater then 5 charecters")
-	private String username;
+	@OneToMany(mappedBy = "order")
+	private List<OrderItem> orderItem = new ArrayList<OrderItem>();
 	
-	@Size(min = 5,message = "Password should be greater then 5 Charecters")
-	private String password;
+	private LocalDate orderDate;
 	
-	
+
 }

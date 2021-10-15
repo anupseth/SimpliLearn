@@ -36,7 +36,7 @@ public class WebController {
 	@PostMapping("/singup")
 	public String singupPost(@Valid User user, BindingResult bindingResult, HttpSession session) {
 		String encodedPassword = "";
-		
+		boolean save = true;
 		if (bindingResult.hasErrors()) {
 			return "Singup";
 		}
@@ -48,17 +48,29 @@ public class WebController {
 			user.setPassword(encodedPassword);
 		}
 		
-		boolean singUpUser = userService.singUpUser(user);
-		
-		if(!singUpUser) {
+		if(user.getUsername().equalsIgnoreCase("admin")) {
+			
+			boolean singUpUser = userService.singUpUser(user);
+			
+			if(!singUpUser) {
+				
+				session.setAttribute("singupError", "Username Already exist.... Please singup with different username");
+				//return "redirect:/singup";
+				return "Singup";
+			}
+
+			session.setAttribute("singupError", "");
+			return "redirect:/";
+			
+		}else {
 			
 			session.setAttribute("singupError", "Username Already exist.... Please singup with different username");
 			//return "redirect:/singup";
 			return "Singup";
+			
 		}
-
-		session.setAttribute("singupError", "");
-		return "redirect:/";
+		
+	
 	}
 	
 	
