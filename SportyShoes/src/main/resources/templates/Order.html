@@ -34,7 +34,7 @@
 			</tr>
 			<tr align="center">
 				<td>Name:</td>
-				<td><input type="text" th:field="*{prodTitle}" /></td>
+				<td><input type="text" th:field="*{prodTitle}" readonly="readonly" /></td>
 				<td th:if="${#fields.hasErrors('prodTitle')}" th:errors="*{prodTitle}"
 					style="color: red;">Name Error</td>
 			</tr>
