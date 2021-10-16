@@ -152,14 +152,27 @@ public class WebController {
 	
 	
 	@GetMapping("/orderProduct/{id}")
-	public String deleteCourse(@PathVariable Integer id) {
+	public String deleteCourse(@PathVariable Integer id,Model model) {
 
-		System.out.println("  ----------id = "+id);
+		//System.out.println("  ----------id = "+id);
 		
 		Product prod = service.getProductById(id);
-		System.out.println(" ---------- prod  ="+ prod);
+		//System.out.println(" ---------- prod  ="+ prod);
 		
-		return "redirect:/";
+		ProductOrderDTO prodDto = new ProductOrderDTO();
+		prodDto.setProdId(prod.getId());
+		prodDto.setProdPrice(prod.getPrice());
+		prodDto.setProdTitle(prod.getTitle());
+		prodDto.setQuantity(1);
+		
+		model.addAttribute("productOrderDTO", prodDto);
+		
+		return "Order";
+	}
+	
+	
+	public void showOrderPage(Model model) {
+		
 	}
 
 }

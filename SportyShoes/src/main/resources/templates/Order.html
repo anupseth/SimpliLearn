@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1 align="center">Welcome to Sporty Shoes</h1>
+<hr>
+
+	<table style="width: 100%">
+		<tbody align="center">
+		<tr>
+			<td> <a href="/" style="font-size: medium;"> Home</a></td>
+			<td> <a href="/singup" style="font-size: medium;"> Sing up</a></td>
+			<td th:if="${session.adminUser != null}"> <a href="#" style="font-size: medium;"> Admin Page</a></td>
+			<td> <a href="/logout" style="font-size: medium;"> Log out</a></td>
+		</tr>
+		</tbody>
+	</table>
+<hr>
+
+<h3 align="center">Order Product Here</h3>
+
+	<form action="#" th:action="@{/addProductToCart}" th:object="${productOrderDTO}"
+		method="post">
+		<table style="width: 100%">
+			<tr style="display: none;" align="center">
+				<td>ID:</td>
+				<td><input type="number" th:field="*{prodId}" /></td>
+				<td th:if="${#fields.hasErrors('prodId')}" th:errors="*{prodId}"
+					style="color: red;">ID Error</td>
+			</tr>
+			<tr align="center">
+				<td>Name:</td>
+				<td><input type="text" th:field="*{prodTitle}" /></td>
+				<td th:if="${#fields.hasErrors('prodTitle')}" th:errors="*{prodTitle}"
+					style="color: red;">Name Error</td>
+			</tr>
+			<tr align="center">
+				<td>Price:</td>
+				<td><input type="number" th:field="*{prodPrice}" readonly="readonly" /></td>
+				<td th:if="${#fields.hasErrors('prodPrice')}" th:errors="*{prodPrice}"
+					style="color: red;">Price Error</td>
+			</tr>
+			<tr align="center">
+				<td>Quantity:</td>
+				<td><input type="number" th:field="*{quantity}" /></td>
+				<td th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"
+					style="color: red;">Quantity Error</td>
+			</tr>
+
+	
+		</table>
+		
+			<button type="submit" style="width: 10%; margin-left: 35%">Add to Cart</button>
+	</form>
+
+
+</body>
+</html>
