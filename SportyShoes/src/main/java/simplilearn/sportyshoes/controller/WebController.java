@@ -1,11 +1,13 @@
 package simplilearn.sportyshoes.controller;
 
+import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -213,6 +216,14 @@ public class WebController {
 		}
 		
 		return "OrderExcuted";
+	}
+
+	@ExceptionHandler(Exception.class)
+	public String handleExcep(HttpServletRequest req, Exception ex,Model model) {
+		System.out.println("Request: " + req.getRequestURL() + " raised " + ex);
+		model.addAttribute("exception",ex.getMessage());
+		model.addAttribute("url",req.getRequestURL());
+		return "Error";
 	}
 
 }
