@@ -36,17 +36,13 @@ public class OrderItem {
 	
 	private Float price;
 	
-	private Float orderItemTotal;
+	private Float orderItemTotal = 0f;
 
 	public OrderItem(Integer quantity) {
 		super();
 		this.quantity = quantity;
 	}
 
-	@Override
-	public String toString() {
-		return "OrderItem [product_Title=" + product.getTitle() + ", quantity= " + quantity + " product_Category= "  + product.getCategory().getName() + " Order_Status= "  + status +"]";
-	}
 	
 	
 

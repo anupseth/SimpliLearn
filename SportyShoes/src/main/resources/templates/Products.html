@@ -41,25 +41,43 @@
 	
 <hr>
 
+<table>
+    <tr th:each="var : ${#vars}">
+        <td th:text="${var.key}"></td>
+        <td th:text="${var.value}"></td>
+    </tr>
+</table>
+
 <div th:if="${session.orderCart != null}">
 	<h3 align="center">Order Summary</h3>
 	<table style="width: 100%">
 		<thead align="center">
 			<tr>
 				<th>Product Name</th>
-				<th>Category</th>
-				<th style="display: none;">Order</th>
+				<th>Quantity</th>
+				<th>Price</th>
 			</tr>
 		</thead>
 		<tbody align="center">
-			<tr th:each="dto : ${dtoList}">
-				<td th:text="${dto.title}" />
-				<td th:text="${dto.category.name}" />
-				<td><a th:href="@{/orderProduct/{id}(id = ${dto.id})}">
-						Order </a></td>
+			<tr th:each="orderItem : ${session.orderCart.orderItem}">
+				<td th:if="${orderItem.product.title}" th:text="${orderItem.product.title}" />
+				<td th:if="${orderItem.quantity}" th:text="${orderItem.quantity}" />
+				<td th:if="${orderItem.orderItemTotal}" th:text="${orderItem.orderItemTotal}" />
 			</tr>
 		</tbody>
 	</table>
+	
+	<label style="color: red;background: black;width: 10%; margin-left: 35%"> TOTAL ORDER AMOUNT : </label>   <label style="color: red;background: black;" th:text="${session.orderCart.orderTotal}"> </label>
+	
+
+	<form action="#" th:action="@{/executeOrder}"
+		method="post">
+		
+		<br>
+		<br>
+		<br>
+		<button type="submit" style="width: 10%; margin-left: 35%">Execute Order</button>
+	</form>
 </div>
 
 

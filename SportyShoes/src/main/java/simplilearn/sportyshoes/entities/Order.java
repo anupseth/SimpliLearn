@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +31,9 @@ public class Order {
 	@GeneratedValue
 	private Integer id;
 	
+	@Column(unique = true)
+	private String orderNumber;
+	
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orderItem = new ArrayList<OrderItem>();
 	
@@ -37,6 +42,14 @@ public class Order {
 	
 	private LocalDate orderDate;
 	
-	private Float orderTotal;
+	private Float orderTotal = 0f;
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", orderNumber=" + orderNumber + ", orderItem=" + orderItem + ", status=" + status
+				+ ", orderDate=" + orderDate + ", orderTotal=" + orderTotal + "]";
+	}
+	
+	
 
 }

@@ -27,9 +27,10 @@ create table order_item (
         primary key (id)
     );
 	
-create table prod_order (
+ create table prod_order (
        id integer not null,
         order_date date,
+        order_number varchar(255),
         order_total float,
         status varchar(255),
         primary key (id)
@@ -51,6 +52,10 @@ create table prod_user (
     );
 	
 --Define constraints
+
+ alter table prod_order 
+       add constraint UK_o397oef24qu43nhl9v4rp9w82 unique (order_number);
+
 alter table order_item 
        add constraint FKmka4fcbxdyvh3ucsa8m0sme5b 
        foreign key (order_id) 

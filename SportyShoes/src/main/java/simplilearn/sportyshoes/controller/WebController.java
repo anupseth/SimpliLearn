@@ -1,6 +1,7 @@
 package simplilearn.sportyshoes.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +46,12 @@ public class WebController {
 		user.setUsername("admin");
 		user.setPassword(PasswordEncoderDecoderUtil.encodePassword("admin"));
 		
-		service.saveEntities(user);
+		service.saveUser(user);
 		
 		User user1 = new User();
 		user1.setUsername("aaaaa");
 		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("aaaaa"));
-		service.saveEntities(user1);
+		service.saveUser(user1);
 		
 	}
 	
@@ -183,7 +184,6 @@ public class WebController {
 	
 	@PostMapping("/addProductToCart")
 	public String addOrdertoOrderItem(@Valid ProductOrderDTO prodOrDTO, BindingResult bindingResult, HttpSession session) {
-		
 		if(session.getAttribute("currentUser") == null)
 		{
 			session.setAttribute("singinError", "Either user is not registered with us or Credentials provided is not correct");
@@ -193,34 +193,14 @@ public class WebController {
 		if(bindingResult.hasErrors())
 			 return "Order";
 		else {
-			Product productById = service.getProductById(prodOrDTO.getProdId());
 			
-			Order order = service.findOrderByStatus(Status.INPROGRESS);
-			if(order == null) {
-				order = new Order();
-				order.setOrderDate(LocalDate.now());
-				order.setStatus(Status.INPROGRESS);
-			}
-			
-			OrderItem orderItem = service.findOrderItemByProductAndStatus(productById,Status.INPROGRESS);
-			if(orderItem == null) {
-				orderItem = new OrderItem();
-				orderItem.setOrder(order);
-				orderItem.setPrice(prodOrDTO.getProdPrice());
-				orderItem.setProduct(productById);
-				orderItem.setQuantity(prodOrDTO.getQuantity());
-				orderItem.setOrderItemTotal(orderItem.getQuantity() * orderItem.getPrice());
-				orderItem.setStatus(Status.INPROGRESS);
-			}else {
-				orderItem.setQuantity(prodOrDTO.getQuantity());
-				orderItem.setOrderItemTotal(orderItem.getQuantity() * orderItem.getPrice());
-			}
-			
-			order.getOrderItem().add(orderItem);
-			
-			service.saveEntities(order,orderItem);
+			Order order = service.addOrderItemToCart(prodOrDTO);
 			
 			session.setAttribute("orderCart", order);
+			
+			System.out.println(" -------------   -----------");
+			
+			System.out.println();
 			
 			return "redirect:/products";
 		}
