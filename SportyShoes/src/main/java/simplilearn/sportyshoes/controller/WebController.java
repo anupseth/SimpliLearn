@@ -198,10 +198,6 @@ public class WebController {
 			
 			session.setAttribute("orderCart", order);
 			
-			System.out.println(" -------------   -----------");
-			
-			System.out.println();
-			
 			return "redirect:/products";
 		}
 		

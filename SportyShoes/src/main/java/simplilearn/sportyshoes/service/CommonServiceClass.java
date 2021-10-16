@@ -163,11 +163,11 @@ public class CommonServiceClass {
 //		if(saveOrder.getOrderItem().size()-1 >= 0)
 //			saveOrder.getOrderItem().set(saveOrder.getOrderItem().size()-1, saveOrderItem);
 		
-		Order saveOrder = ordRepo.save(order);
+		//Order saveOrder = ordRepo.save(order);
 		OrderItem saveOrderItem = ordItemRepo.save(orderItem);
 		
-		saveOrder.getOrderItem().add(saveOrderItem);
+		order.getOrderItem().add(saveOrderItem);
 
-		return saveOrder;
+		return ordRepo.save(order);
 	}
 }
