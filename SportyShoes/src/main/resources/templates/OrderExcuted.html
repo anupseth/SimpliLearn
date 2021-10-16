@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1 align="center">Welcome to Sporty Shoes</h1>
+<hr>
+	<table style="width: 100%">
+		<tbody align="center">
+		<tr>
+			<td> <a href="/" style="font-size: medium;"> Home</a></td>
+			<td> <a href="/singup" style="font-size: medium;"> Sing up</a></td>
+			<td th:if="${session.adminUser != null}"> <a href="#" style="font-size: medium;"> Admin Page</a></td>
+			<td> <a href="/logout" style="font-size: medium;"> Log out</a></td>
+			<td th:if="${session.finalOrder != null}"> <a href="/products" style="font-size: medium;"> Products</a></td>
+		</tr>
+		</tbody>
+	</table>
+<hr>
+	
+<h3 align="center">ORDER STATUS</h3>
+	<table style="width: 100%">
+		<thead align="center">
+			<tr>
+				<th>ORDER NUMBER</th>
+				<th>ORDER DATE</th>
+				<th>ORDER AMOUNT</th>
+				<th>ORDER STATUS</th>
+			</tr>
+		</thead>
+		<tbody align="center">
+			<tr>
+				<td th:text="${session.finalOrder.orderNumber}" />
+				<td th:text="${session.finalOrder.orderDate}" />
+				<td th:text="${session.finalOrder.orderTotal}" />
+				<td th:text="${session.finalOrder.status}" />
+			</tr>
+		</tbody>
+	</table>
+	
+<hr>
+
+</body>
+</html>

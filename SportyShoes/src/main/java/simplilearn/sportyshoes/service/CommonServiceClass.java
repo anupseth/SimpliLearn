@@ -170,4 +170,26 @@ public class CommonServiceClass {
 
 		return ordRepo.save(order);
 	}
+
+	public boolean executeOrder(Integer id) {
+		Optional<Order> findById = ordRepo.findById(id);
+		Order order = null;
+		if(findById.isPresent()) {
+			order = findById.get();
+			order.setStatus(Status.COMPLETED);
+			order.getOrderItem().forEach(ordItem -> ordItem.setStatus(Status.COMPLETED));
+			return true;
+		}
+		
+		return false;
+	}
+
+	public Order getOrder(Integer integer) {
+		Optional<Order> findById = ordRepo.findById(integer);
+		
+		if(findById.isPresent())
+			return findById.get();
+		
+		return null;
+	}
 }
