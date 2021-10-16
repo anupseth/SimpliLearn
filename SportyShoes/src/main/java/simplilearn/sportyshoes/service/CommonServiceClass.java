@@ -1,6 +1,7 @@
 package simplilearn.sportyshoes.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,14 @@ public class CommonServiceClass {
 	
 	public void createUser(User user) {
 		userRepo.save(user);
+	}
+
+
+	public Product getProductById(Integer id) {
+		Optional<Product> findById = proRepo.findById(id);
+		if(findById.isPresent())
+			return findById.get();
+		else 
+			return null;
 	}
 }

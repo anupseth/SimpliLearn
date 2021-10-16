@@ -22,15 +22,24 @@
 	
 	
 <h3 align="center">Selects the Products to Purchase</h3>
-
-<table>
-<tr th:each="dto : ${dtoList}">
-            <td th:text="${dto.prodId}">1</td>
-            <td><a href="#" th:text="${dto.prodPrice}">Title ...</a></td>
-            <td th:text="${dto.prodTitle}">Text ...</td>
-        </tr>
-
-</table>
+	<table style="width: 100%">
+		<thead align="center">
+			<tr>
+				<th>Product Name</th>
+				<th>Category</th>
+				<th>Order</th>
+				<th style="display: none;">Order</th>
+			</tr>
+		</thead>
+		<tbody align="center">
+			<tr th:each="dto : ${dtoList}">
+				<td th:text="${dto.title}" />
+				<td th:text="${dto.category.name}" />
+				<td><a th:href="@{/orderProduct/{id}(id = ${dto.id})}">
+						Order </a></td>
+			</tr>
+		</tbody>
+	</table>
 
 
 </body>

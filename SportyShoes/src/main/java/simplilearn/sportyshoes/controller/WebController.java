@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import simplilearn.sportyshoes.dto.ProductOrderDTO;
@@ -127,7 +128,7 @@ public class WebController {
 	}
 	
 	@GetMapping("/products")
-	public String productsPage(HttpSession session,Model  model) {
+	public String productsPage(HttpSession session,Model model) {
 		
 		if(session.getAttribute("currentUser") == null)
 		{
@@ -135,19 +136,8 @@ public class WebController {
 			return "redirect:/";
 		}
 		List<Product> allProducts = service.getAllProducts();
-		List<ProductOrderDTO> prodOrderDtoList = new ArrayList<ProductOrderDTO>();
-		allProducts.forEach((prod) -> {
-			
-			ProductOrderDTO prodDto  = new ProductOrderDTO();
-			prodDto.setProdId(prod.getId());
-			prodDto.setProdPrice(prod.getPrice());
-			prodDto.setProdTitle(prod.getTitle());
-			prodDto.setQuantity(1);
-			
-			prodOrderDtoList.add(prodDto);
-		});
 		
-		model.addAttribute("dtoList", prodOrderDtoList);
+		model.addAttribute("dtoList", allProducts);
 			
 		return "Products";
 	}
@@ -158,6 +148,18 @@ public class WebController {
 		session.setAttribute("currentUser",null);
 		return "redirect:/";
 		
+	}
+	
+	
+	@GetMapping("/orderProduct/{id}")
+	public String deleteCourse(@PathVariable Integer id) {
+
+		System.out.println("  ----------id = "+id);
+		
+		Product prod = service.getProductById(id);
+		System.out.println(" ---------- prod  ="+ prod);
+		
+		return "redirect:/";
 	}
 
 }
