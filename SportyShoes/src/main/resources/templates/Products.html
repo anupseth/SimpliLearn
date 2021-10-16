@@ -38,6 +38,30 @@
 			</tr>
 		</tbody>
 	</table>
+	
+<hr>
+
+<div th:if="${session.orderCart != null}">
+	<h3 align="center">Order Summary</h3>
+	<table style="width: 100%">
+		<thead align="center">
+			<tr>
+				<th>Product Name</th>
+				<th>Category</th>
+				<th style="display: none;">Order</th>
+			</tr>
+		</thead>
+		<tbody align="center">
+			<tr th:each="dto : ${dtoList}">
+				<td th:text="${dto.title}" />
+				<td th:text="${dto.category.name}" />
+				<td><a th:href="@{/orderProduct/{id}(id = ${dto.id})}">
+						Order </a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 
 
 </body>

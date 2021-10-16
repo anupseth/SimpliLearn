@@ -1,5 +1,6 @@
 package simplilearn.sportyshoes.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import simplilearn.sportyshoes.dto.ProductOrderDTO;
+import simplilearn.sportyshoes.entities.Order;
+import simplilearn.sportyshoes.entities.OrderItem;
 import simplilearn.sportyshoes.entities.Product;
+import simplilearn.sportyshoes.entities.Status;
 import simplilearn.sportyshoes.entities.User;
 import simplilearn.sportyshoes.service.CommonServiceClass;
 import simplilearn.sportyshoes.service.UserService;
@@ -41,12 +45,12 @@ public class WebController {
 		user.setUsername("admin");
 		user.setPassword(PasswordEncoderDecoderUtil.encodePassword("admin"));
 		
-		service.createUser(user);
+		service.saveEntities(user);
 		
 		User user1 = new User();
 		user1.setUsername("aaaaa");
 		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("aaaaa"));
-		service.createUser(user1);
+		service.saveEntities(user1);
 		
 	}
 	
@@ -146,13 +150,20 @@ public class WebController {
 	public String logout(HttpSession session) {
 		
 		session.setAttribute("currentUser",null);
+		session.setAttribute("orderCart", null);
 		return "redirect:/";
 		
 	}
 	
 	
 	@GetMapping("/orderProduct/{id}")
-	public String deleteCourse(@PathVariable Integer id,Model model) {
+	public String deleteCourse(@PathVariable Integer id,Model model, HttpSession session) {
+		
+		if(session.getAttribute("currentUser") == null)
+		{
+			session.setAttribute("singinError", "Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
 
 		//System.out.println("  ----------id = "+id);
 		
@@ -170,8 +181,50 @@ public class WebController {
 		return "Order";
 	}
 	
-	
-	public void showOrderPage(Model model) {
+	@PostMapping("/addProductToCart")
+	public String addOrdertoOrderItem(@Valid ProductOrderDTO prodOrDTO, BindingResult bindingResult, HttpSession session) {
+		
+		if(session.getAttribute("currentUser") == null)
+		{
+			session.setAttribute("singinError", "Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		if(bindingResult.hasErrors())
+			 return "Order";
+		else {
+			Product productById = service.getProductById(prodOrDTO.getProdId());
+			
+			Order order = service.findOrderByStatus(Status.INPROGRESS);
+			if(order == null) {
+				order = new Order();
+				order.setOrderDate(LocalDate.now());
+				order.setStatus(Status.INPROGRESS);
+			}
+			
+			OrderItem orderItem = service.findOrderItemByProductAndStatus(productById,Status.INPROGRESS);
+			if(orderItem == null) {
+				orderItem = new OrderItem();
+				orderItem.setOrder(order);
+				orderItem.setPrice(prodOrDTO.getProdPrice());
+				orderItem.setProduct(productById);
+				orderItem.setQuantity(prodOrDTO.getQuantity());
+				orderItem.setOrderItemTotal(orderItem.getQuantity() * orderItem.getPrice());
+				orderItem.setStatus(Status.INPROGRESS);
+			}else {
+				orderItem.setQuantity(prodOrDTO.getQuantity());
+				orderItem.setOrderItemTotal(orderItem.getQuantity() * orderItem.getPrice());
+			}
+			
+			order.getOrderItem().add(orderItem);
+			
+			service.saveEntities(order,orderItem);
+			
+			session.setAttribute("orderCart", order);
+			
+			return "redirect:/products";
+		}
+		
 		
 	}
 
