@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 public class PasswordEncoderDecoderUtil {
-	
+
 	public static String decodePassword(String encodedPassword) {
 		String decodedPass = "";
 		byte[] base64decodedBytes = Base64.getDecoder().decode(encodedPassword);
@@ -14,20 +14,21 @@ public class PasswordEncoderDecoderUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return decodedPass;
-	}
 
+		return decodedPass;
+
+	}
 
 	public static String encodePassword(String password) {
 		String encodedPassword = "";
 		try {
-			encodedPassword = Base64.getEncoder().encodeToString(
-					password.getBytes("utf-8"));
+
+			encodedPassword = Base64.getEncoder().encodeToString(password.getBytes("utf-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return encodedPassword;
+
 	}
 
 }

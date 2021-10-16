@@ -1,23 +1,53 @@
 package simplilearn.sportyshoes.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import simplilearn.sportyshoes.dto.ProductOrderDTO;
+import simplilearn.sportyshoes.entities.Product;
 import simplilearn.sportyshoes.entities.User;
+import simplilearn.sportyshoes.service.CommonServiceClass;
 import simplilearn.sportyshoes.service.UserService;
 import simplilearn.sportyshoes.util.PasswordEncoderDecoderUtil;
 
 @Controller
 public class WebController {
 	
+	
+	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CommonServiceClass service;
+	
+	@PostConstruct
+	public void init() {
+		
+		User user = new User();
+		user.setUsername("admin");
+		user.setPassword(PasswordEncoderDecoderUtil.encodePassword("admin"));
+		
+		service.createUser(user);
+		
+		User user1 = new User();
+		user1.setUsername("aaaaa");
+		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("aaaaa"));
+		service.createUser(user1);
+		
+	}
 	
 	@GetMapping("/")
 	public String entryPoint(User user, HttpSession session) {
@@ -26,6 +56,7 @@ public class WebController {
 		return "Home";
 	}
 
+	
 	
 	@GetMapping("/singup")
 	public String singup(User user) {
@@ -48,7 +79,7 @@ public class WebController {
 			user.setPassword(encodedPassword);
 		}
 		
-		if(user.getUsername().equalsIgnoreCase("admin")) {
+		if(!user.getUsername().equalsIgnoreCase("admin")) {
 			
 			boolean singUpUser = userService.singUpUser(user);
 			
@@ -96,14 +127,27 @@ public class WebController {
 	}
 	
 	@GetMapping("/products")
-	public String productsPage(HttpSession session) {
+	public String productsPage(HttpSession session,Model  model) {
 		
 		if(session.getAttribute("currentUser") == null)
 		{
 			session.setAttribute("singinError", "Either user is not registered with us or Credentials provided is not correct");
 			return "redirect:/";
 		}
+		List<Product> allProducts = service.getAllProducts();
+		List<ProductOrderDTO> prodOrderDtoList = new ArrayList<ProductOrderDTO>();
+		allProducts.forEach((prod) -> {
 			
+			ProductOrderDTO prodDto  = new ProductOrderDTO();
+			prodDto.setProdId(prod.getId());
+			prodDto.setProdPrice(prod.getPrice());
+			prodDto.setProdTitle(prod.getTitle());
+			prodDto.setQuantity(1);
+			
+			prodOrderDtoList.add(prodDto);
+		});
+		
+		model.addAttribute("dtoList", prodOrderDtoList);
 			
 		return "Products";
 	}

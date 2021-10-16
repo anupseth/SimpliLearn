@@ -23,5 +23,15 @@
 	
 <h3 align="center">Selects the Products to Purchase</h3>
 
+<table>
+<tr th:each="dto : ${dtoList}">
+            <td th:text="${dto.prodId}">1</td>
+            <td><a href="#" th:text="${dto.prodPrice}">Title ...</a></td>
+            <td th:text="${dto.prodTitle}">Text ...</td>
+        </tr>
+
+</table>
+
+
 </body>
 </html>

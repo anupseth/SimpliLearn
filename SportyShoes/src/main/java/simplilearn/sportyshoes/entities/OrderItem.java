@@ -1,6 +1,8 @@
 package simplilearn.sportyshoes.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -28,6 +30,13 @@ public class OrderItem {
 	
 	@ManyToOne
 	private Order order;
+	
+	@Enumerated(EnumType.STRING)
+	private Status status;
+	
+	private Float price;
+	
+	private Float orderItemTotal;
 
 	public OrderItem(Integer quantity) {
 		super();
@@ -36,7 +45,7 @@ public class OrderItem {
 
 	@Override
 	public String toString() {
-		return "OrderItem [product_Title=" + product.getTitle() + ", quantity= " + quantity + " product_Category= "  + product.getCategory().getName() + "]";
+		return "OrderItem [product_Title=" + product.getTitle() + ", quantity= " + quantity + " product_Category= "  + product.getCategory().getName() + " Order_Status= "  + status +"]";
 	}
 	
 	

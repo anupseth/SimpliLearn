@@ -13,6 +13,7 @@ import simplilearn.sportyshoes.entities.Category;
 import simplilearn.sportyshoes.entities.Order;
 import simplilearn.sportyshoes.entities.OrderItem;
 import simplilearn.sportyshoes.entities.Product;
+import simplilearn.sportyshoes.entities.Status;
 import simplilearn.sportyshoes.repository.CategoryRepository;
 import simplilearn.sportyshoes.repository.OrderItemRepository;
 import simplilearn.sportyshoes.repository.OrderRepository;
@@ -71,12 +72,17 @@ class SportyShoesRepoTest {
 		pro2.getOrderItem().add(oI2);
 		pro3.getOrderItem().add(oI3);
 		
+		oI1.setStatus(Status.INPROGRESS);
+		oI2.setStatus(Status.INPROGRESS);
+		oI3.setStatus(Status.INPROGRESS);
+		
 		
 		Order order = new Order();
 		order.setOrderDate(LocalDate.now());
 		order.getOrderItem().add(oI3);
 		order.getOrderItem().add(oI2);
 		order.getOrderItem().add(oI1);
+		order.setStatus(Status.INPROGRESS);
 		
 		
 		oI1.setOrder(order);
