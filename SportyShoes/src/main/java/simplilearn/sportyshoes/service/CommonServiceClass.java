@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import simplilearn.sportyshoes.repository.OrderItemRepository;
 import simplilearn.sportyshoes.repository.OrderRepository;
 import simplilearn.sportyshoes.repository.ProductRepository;
 import simplilearn.sportyshoes.repository.UserRepository;
+import simplilearn.sportyshoes.util.PasswordEncoderDecoderUtil;
 
 @Service
 @Transactional
@@ -191,5 +193,22 @@ public class CommonServiceClass {
 			return findById.get();
 		
 		return null;
+	}
+
+	public boolean changePasswordForAdmin(@Valid User user, HttpSession session) {
+		User userFromDb = userRepo.findByUsername("admin");
+		
+		String decodePassword = PasswordEncoderDecoderUtil.decodePassword(userFromDb.getPassword());
+		
+		if(user.getPassword().equalsIgnoreCase(decodePassword))
+		{
+			session.setAttribute("adminErr", "Password must be different from previous password");
+			return false;
+		}
+		userFromDb.setPassword(PasswordEncoderDecoderUtil.encodePassword(user.getPassword()));
+		userRepo.save(userFromDb);
+		
+		session.setAttribute("adminChPaSu", "Password Changed Successfully. Please login again");
+		return true;
 	}
 }

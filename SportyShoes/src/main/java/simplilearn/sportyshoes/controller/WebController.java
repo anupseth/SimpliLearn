@@ -1,9 +1,5 @@
 package simplilearn.sportyshoes.controller;
 
-import java.net.http.HttpRequest;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import simplilearn.sportyshoes.dto.ProductOrderDTO;
 import simplilearn.sportyshoes.entities.Order;
-import simplilearn.sportyshoes.entities.OrderItem;
 import simplilearn.sportyshoes.entities.Product;
-import simplilearn.sportyshoes.entities.Status;
 import simplilearn.sportyshoes.entities.User;
 import simplilearn.sportyshoes.service.CommonServiceClass;
 import simplilearn.sportyshoes.service.UserService;
@@ -108,7 +101,8 @@ public class WebController {
 
 	@PostMapping("/singin")
 	public String singinPost(@Valid User user, BindingResult bindingResult, HttpSession session) {
-
+		session.setAttribute("adminChPaSu", "");
+		
 		if (bindingResult.hasErrors()) {
 			return "Home";
 		}
@@ -119,18 +113,25 @@ public class WebController {
 
 			session.setAttribute("singinError",
 					"Either user is not registered with us or Credentials provided is not correct");
-			// return "redirect:/";
 			return "Home";
 		}
-
-		session.setAttribute("currentUser", user.getUsername());
-		session.setAttribute("singinError", "");
-		return "redirect:/products";
+		
+		if(user.getUsername().equalsIgnoreCase("admin")) {
+			session.setAttribute("adminUser", user.getUsername());
+			session.setAttribute("singinError", "");
+			return "redirect:/admin";
+		
+		}else {
+			session.setAttribute("currentUser", user.getUsername());
+			session.setAttribute("singinError", "");
+			return "redirect:/products";
+		}
 	}
 
 	@GetMapping("/products")
 	public String productsPage(HttpSession session, Model model) {
 
+		session.setAttribute("adminChPaSu", "");
 		if (session.getAttribute("currentUser") == null) {
 			session.setAttribute("singinError",
 					"Either user is not registered with us or Credentials provided is not correct");
@@ -147,6 +148,7 @@ public class WebController {
 	public String logout(HttpSession session) {
 
 		session.setAttribute("currentUser", null);
+		session.setAttribute("adminUser", null);
 		session.setAttribute("orderCart", null);
 		return "redirect:/";
 
@@ -202,7 +204,6 @@ public class WebController {
 	
 	@PostMapping("/executeOrder")
 	public String executeOrder(HttpSession session) {
-		System.out.println(" ***************** inside post *****************");
 		
 		Order order = (Order) session.getAttribute("orderCart");
 		boolean orderExecuted = false;

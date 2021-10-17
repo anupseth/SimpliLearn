@@ -14,13 +14,15 @@
 		<tr>
 			<td> <a href="/" style="font-size: medium;"> Home</a></td>
 			<td> <a href="/singup" style="font-size: medium;"> Sing up</a></td>
-			<td> <a href="#" style="font-size: medium;"> Admin Page</a></td>
+			<!-- <td> <a href="/admin" style="font-size: medium;"> Admin Page</a></td> -->
 			<td th:if="${session.currentUser != null}"> <a href="/logout" style="font-size: medium;"> Log out</a></td>
 		</tr>
 		</tbody>
 	</table>
 	
 <h3 align="center">Sing-In for Sporty Shoes</h3>
+
+<span  style="color: green;" th:text="${session.adminChPaSu}"></span>
 	
 <span th:if="${session.singinError != ''}" th:text="${session.singinError}" style="color: red;">Error</span>
 	
