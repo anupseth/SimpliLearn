@@ -46,6 +46,17 @@ public class WebController {
 		user1.setUsername("aaaaa");
 		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("aaaaa"));
 		service.saveUser(user1);
+		
+		User user2 = new User();
+		user2.setUsername("bbbbb");
+		user2.setPassword(PasswordEncoderDecoderUtil.encodePassword("bbbbb"));
+		service.saveUser(user2);
+		
+		
+		User user3 = new User();
+		user3.setUsername("ccccc");
+		user3.setPassword(PasswordEncoderDecoderUtil.encodePassword("ccccc"));
+		service.saveUser(user3);
 
 	}
 

@@ -1,10 +1,12 @@
 package simplilearn.sportyshoes.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +55,12 @@ public class AdminController {
 			return "PasswordChange";
 		}
 		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
 		
 		boolean success = service.changePasswordForAdmin(user, session);
 
@@ -65,5 +73,57 @@ public class AdminController {
 		}
 
 	}
+	
+	
+	@GetMapping("/users")
+	public String getUsersPage(Model model, HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		model.addAttribute("userList", service.getAllUsers());
+		
+		return "Users";
+	}
+	
+	@GetMapping("/searchUser")
+	public String getSearchUserPage(Model model, HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		session.setAttribute("noserach", "T");
+		
+		return "SearchUsers";
+	}
+	
+	@GetMapping("/searchUserDb")
+	public String searchUser(HttpServletRequest req, HttpSession session, Model model) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		String username = req.getParameter("userName");
+		
+		
+		User user = service.findUserByUserName(username);
+		
+		if(user != null)
+		   model.addAttribute("userName",user.getUsername());
+		
+		session.setAttribute("noserach", "F");
+		
+		return "SearchUsers";
+	}
+
 
 }

@@ -211,4 +211,14 @@ public class CommonServiceClass {
 		session.setAttribute("adminChPaSu", "Password Changed Successfully. Please login again");
 		return true;
 	}
+
+	public List<User> getAllUsers() {
+		
+		return userRepo.findAll();
+	}
+
+	public User findUserByUserName(String username) {
+		User findByUsername = userRepo.findByUsername(username);
+		return findByUsername;
+	}
 }

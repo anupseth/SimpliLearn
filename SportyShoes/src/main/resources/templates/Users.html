@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1 align="center">Welcome to Sporty Shoes</h1>
+<hr>
+
+	<table style="width: 100%">
+		<tbody align="center">
+		<tr>
+			<td> <a href="/" style="font-size: medium;"> Home</a></td>
+			<td> <a href="/admin" style="font-size: medium;"> Admin Home</a></td>
+			<td th:if="${session.adminUser != null}"> <a href="/logout" style="font-size: medium;"> Log out</a></td>
+		</tr>
+		</tbody>
+	</table>
+<hr>
+	
+<h3 align="center">Registered User List</h3>
+	<table style="width: 100%">
+		<thead align="center">
+			<tr>
+				<th>User Name</th>
+			</tr>
+		</thead>
+		<tbody align="center">
+			<tr th:each="user : ${userList}">
+				<td th:text="${user.username}" />
+			</tr>
+		</tbody>
+	</table>
+	
+<hr>
+
+
+</body>
+</html>
