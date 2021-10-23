@@ -1,5 +1,7 @@
 package simplilearn.sportyshoes.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -9,8 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import simplilearn.sportyshoes.entities.Category;
+import simplilearn.sportyshoes.entities.Product;
 import simplilearn.sportyshoes.entities.User;
 import simplilearn.sportyshoes.service.CommonServiceClass;
 
@@ -32,7 +37,7 @@ public class AdminController {
 		
 		session.setAttribute("singinError", "");
 		
-		return "Admin";
+		return "adminPages/Admin";
 	}
 
 	@GetMapping("/ChangePasword")
@@ -45,14 +50,14 @@ public class AdminController {
 			return "redirect:/";
 		}
 		
-		return "PasswordChange";
+		return "adminPages/PasswordChange";
 	}
 
 	@PostMapping("/ChangePasword")
 	public String changePasswordPost(@Valid User user, BindingResult bindingResult, HttpSession session) {
 
 		if(bindingResult.hasErrors()) {
-			return "PasswordChange";
+			return "adminPages/PasswordChange";
 		}
 		
 		if (session.getAttribute("adminUser") == null) {
@@ -86,7 +91,7 @@ public class AdminController {
 		
 		model.addAttribute("userList", service.getAllUsers());
 		
-		return "Users";
+		return "adminPages/Users";
 	}
 	
 	@GetMapping("/searchUser")
@@ -100,7 +105,7 @@ public class AdminController {
 		
 		session.setAttribute("noserach", "T");
 		
-		return "SearchUsers";
+		return "adminPages/SearchUsers";
 	}
 	
 	@GetMapping("/searchUserDb")
@@ -122,8 +127,99 @@ public class AdminController {
 		
 		session.setAttribute("noserach", "F");
 		
-		return "SearchUsers";
+		return "adminPages/SearchUsers";
 	}
-
+	
+	
+	
+	@GetMapping("/manageProducts")
+	public String getManageproducts(Model model, HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		model.addAttribute("prodList", service.getAllProducts());
+		
+		return "adminPages/ProductsList";
+	}
+	
+	
+	@GetMapping("/manageProduct/{id}")
+	public String manageProduct(@PathVariable Integer id, Model model, HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		List<String> catList = service.getAllCategory();
+		model.addAttribute("catNames", catList);
+		
+		Product productById = service.getProductById(id);
+		
+		model.addAttribute("product", productById);
+		
+		return "adminPages/EditProduct";
+	}
+	
+	@GetMapping("/addNewProduct")
+	public String addNewProduct(Product product, HttpSession session, Model model) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		List<String> catList = service.getAllCategory();
+		model.addAttribute("catNames", catList);
+		
+		return "adminPages/EditProduct";
+	}
+	
+	@PostMapping("/editProduct")
+	public String editProduct(@Valid Product product, BindingResult bindingResult, HttpSession session, Model model) {
+		
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		if(bindingResult.hasErrors()) {
+			return "adminPages/EditProduct";
+		}
+		
+		
+		service.UpdateProduct(product);
+		
+		
+		
+		model.addAttribute("prodList", service.getAllProducts());
+		
+		return "adminPages/ProductsList";
+	}
+	
+	
+	@GetMapping("/deleteProduct/{id}")
+	public String deleteProduct(@PathVariable Integer id, Model model, HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		service.deleteProduct(id);
+		
+		model.addAttribute("prodList", service.getAllProducts());
+		
+		return "adminPages/ProductsList";
+	}
 
 }

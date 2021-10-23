@@ -36,9 +36,10 @@ create table order_item (
         primary key (id)
     );
 	
-create table product (
+  create table product (
        id integer not null,
-        price float not null,
+        deleted boolean not null,
+        price float not null check (price>=1),
         title varchar(255),
         category_id integer,
         primary key (id)
@@ -55,6 +56,9 @@ create table prod_user (
 
  alter table prod_order 
        add constraint UK_o397oef24qu43nhl9v4rp9w82 unique (order_number);
+       
+ alter table category 
+       add constraint UK_CAT_NAME unique (name);
 
 alter table order_item 
        add constraint FKmka4fcbxdyvh3ucsa8m0sme5b 
@@ -77,14 +81,14 @@ insert into category(id,name) values(1,'Cricket');
 insert into category(id,name) values(2,'Football');
 insert into category(id,name) values(3,'Hockey');
 
-insert into product(id,price,title,category_id) values(4,200,'CSK Shoes',1);
-insert into product(id,price,title,category_id) values(5,150,'MI Shoes',1);
-insert into product(id,price,title,category_id) values(6,100,'RCB Shoes',1);
+insert into product(id,price,title,category_id,deleted) values(4,200,'CSK Shoes',1,false);
+insert into product(id,price,title,category_id,deleted) values(5,150,'MI Shoes',1,false);
+insert into product(id,price,title,category_id,deleted) values(6,100,'RCB Shoes',1,false);
 
-insert into product(id,price,title,category_id) values(7,500,'MANUTD Shoes',2);
-insert into product(id,price,title,category_id) values(8,50,'Chelsea Shoes',2);
-insert into product(id,price,title,category_id) values(9,10,'Arsenal Shoes',2);
+insert into product(id,price,title,category_id,deleted) values(7,500,'MANUTD Shoes',2,false);
+insert into product(id,price,title,category_id,deleted) values(8,50,'Chelsea Shoes',2,false);
+insert into product(id,price,title,category_id,deleted) values(9,10,'Arsenal Shoes',2,false);
 
-insert into product(id,price,title,category_id) values(10,2000,'India Shoes',3);
-insert into product(id,price,title,category_id) values(11,450,'Japan Shoes',3);
-insert into product(id,price,title,category_id) values(12,100,'England Shoes',3);
+insert into product(id,price,title,category_id,deleted) values(10,2000,'India Shoes',3,false);
+insert into product(id,price,title,category_id,deleted) values(11,450,'Japan Shoes',3,false);
+insert into product(id,price,title,category_id,deleted) values(12,100,'England Shoes',3,false);

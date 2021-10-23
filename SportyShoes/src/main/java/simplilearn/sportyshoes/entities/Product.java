@@ -9,6 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +27,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "product")
+@SQLDelete(sql = "UPDATE product SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Product {
 	
 
@@ -27,8 +37,10 @@ public class Product {
 	@GeneratedValue
 	private Integer id;
 	
+	@NotBlank
 	private String title;
 	
+	@Min(value = 1, message = "Minimum value should be 1.0")
 	private float price;
 	
 	@ManyToOne
@@ -36,6 +48,11 @@ public class Product {
 	
 	@OneToMany(mappedBy = "product")
 	private List<OrderItem> orderItem = new ArrayList<OrderItem>();
+	
+	@Transient
+	private String cat;
+	
+	private boolean deleted = Boolean.FALSE;
 
 	public Product(String title, float price) {
 		super();
@@ -45,8 +62,9 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", title=" + title + ", price=" + price + "]";
+		return "Product [id=" + id + ", title=" + title + ", price=" + price + ", cat=" + cat + "]";
 	}
+
 	
 	
 }

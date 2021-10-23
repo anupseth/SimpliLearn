@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import simplilearn.sportyshoes.dto.ProductOrderDTO;
+import simplilearn.sportyshoes.entities.Category;
 import simplilearn.sportyshoes.entities.Order;
 import simplilearn.sportyshoes.entities.OrderItem;
 import simplilearn.sportyshoes.entities.Product;
@@ -34,7 +35,7 @@ public class CommonServiceClass {
 	private CategoryRepository catRepo;
 
 	@Autowired
-	private ProductRepository proRepo;
+	private ProductRepository prodRepo;
 
 	@Autowired
 	private OrderRepository ordRepo;
@@ -46,7 +47,7 @@ public class CommonServiceClass {
 	private UserRepository userRepo;
 
 	public List<Product> getAllProducts() {
-		return proRepo.findAll();
+		return prodRepo.findAll();
 	}
 
 //	public void createUser(User user) {
@@ -54,7 +55,7 @@ public class CommonServiceClass {
 //	}
 
 	public Product getProductById(Integer id) {
-		Optional<Product> findById = proRepo.findById(id);
+		Optional<Product> findById = prodRepo.findById(id);
 		if (findById.isPresent())
 			return findById.get();
 		else
@@ -89,15 +90,15 @@ public class CommonServiceClass {
 //			}
 //		}
 //	}
-	
+
 	public User saveUser(User user) {
 		return userRepo.save(user);
 	}
-	
+
 	public Order saveOrder(Order order) {
 		return ordRepo.save(order);
 	}
-	
+
 	public OrderItem saveOrderItem(OrderItem orderItem) {
 		return ordItemRepo.save(orderItem);
 	}
@@ -142,7 +143,7 @@ public class CommonServiceClass {
 			orderItem.setOrderItemTotal(orderItem.getQuantity() * orderItem.getPrice());
 			order.setOrderTotal(order.getOrderTotal() + orderItem.getOrderItemTotal());
 			orderItem.setStatus(Status.INPROGRESS);
-			//order.getOrderItem().add(orderItem);
+			// order.getOrderItem().add(orderItem);
 		}
 		// OrderItem orderItem =
 		// findOrderItemByProductAndStatus(productById,Status.INPROGRESS);
@@ -164,10 +165,10 @@ public class CommonServiceClass {
 //		
 //		if(saveOrder.getOrderItem().size()-1 >= 0)
 //			saveOrder.getOrderItem().set(saveOrder.getOrderItem().size()-1, saveOrderItem);
-		
-		//Order saveOrder = ordRepo.save(order);
+
+		// Order saveOrder = ordRepo.save(order);
 		OrderItem saveOrderItem = ordItemRepo.save(orderItem);
-		
+
 		order.getOrderItem().add(saveOrderItem);
 
 		return ordRepo.save(order);
@@ -176,49 +177,101 @@ public class CommonServiceClass {
 	public boolean executeOrder(Integer id) {
 		Optional<Order> findById = ordRepo.findById(id);
 		Order order = null;
-		if(findById.isPresent()) {
+		if (findById.isPresent()) {
 			order = findById.get();
 			order.setStatus(Status.COMPLETED);
 			order.getOrderItem().forEach(ordItem -> ordItem.setStatus(Status.COMPLETED));
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	public Order getOrder(Integer integer) {
 		Optional<Order> findById = ordRepo.findById(integer);
-		
-		if(findById.isPresent())
+
+		if (findById.isPresent())
 			return findById.get();
-		
+
 		return null;
 	}
 
 	public boolean changePasswordForAdmin(@Valid User user, HttpSession session) {
 		User userFromDb = userRepo.findByUsername("admin");
-		
+
 		String decodePassword = PasswordEncoderDecoderUtil.decodePassword(userFromDb.getPassword());
-		
-		if(user.getPassword().equalsIgnoreCase(decodePassword))
-		{
+
+		if (user.getPassword().equalsIgnoreCase(decodePassword)) {
 			session.setAttribute("adminErr", "Password must be different from previous password");
 			return false;
 		}
 		userFromDb.setPassword(PasswordEncoderDecoderUtil.encodePassword(user.getPassword()));
 		userRepo.save(userFromDb);
-		
+
 		session.setAttribute("adminChPaSu", "Password Changed Successfully. Please login again");
 		return true;
 	}
 
 	public List<User> getAllUsers() {
-		
+
 		return userRepo.findAll();
 	}
 
 	public User findUserByUserName(String username) {
 		User findByUsername = userRepo.findByUsername(username);
 		return findByUsername;
+	}
+
+	public List<String> getAllCategory() {
+		return catRepo.getCatNames();
+	}
+
+	public void UpdateProduct(Product product) {
+
+		Category category = catRepo.findByName(product.getCat());
+
+		if (product.getId() == null) {
+			product.setCategory(category);
+			product.setTitle(product.getTitle());
+			product.setPrice(product.getPrice());
+
+			category.getProducts().add(product);
+
+			prodRepo.save(product);
+			catRepo.save(category);
+		} else {
+
+			Optional<Product> optionalProduct = prodRepo.findById(product.getId());
+
+			if (optionalProduct.isPresent()) {
+
+				Product productFrmDb = optionalProduct.get();
+
+				category.getProducts().remove(productFrmDb);
+
+				productFrmDb.setCategory(category);
+				productFrmDb.setTitle(product.getTitle());
+				productFrmDb.setPrice(product.getPrice());
+
+				category.getProducts().add(productFrmDb);
+
+				prodRepo.save(productFrmDb);
+				catRepo.save(category);
+
+			}
+
+		}
+
+	}
+
+	public void deleteProduct(Integer id) {
+	
+		Optional<Product> findById = prodRepo.findById(id);
+		
+		if(findById.isPresent()) {
+			Product product = findById.get();
+			prodRepo.delete(product);
+		}
+		
 	}
 }
