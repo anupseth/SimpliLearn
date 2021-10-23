@@ -1,5 +1,7 @@
 package simplilearn.sportyshoes.controller;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -8,11 +10,14 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -32,6 +37,13 @@ public class WebController {
 
 	@Autowired
 	private CommonServiceClass service;
+	
+//	@InitBinder
+//	protected void initBinder(WebDataBinder binder) {
+//		
+//		SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		binder.registerCustomEditor(LocalDate.class, new CustomDateEditor(dataFormat, false));
+//	}
 
 	@PostConstruct
 	public void init() {
@@ -43,19 +55,19 @@ public class WebController {
 		service.saveUser(user);
 
 		User user1 = new User();
-		user1.setUsername("aaaaa");
-		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("aaaaa"));
+		user1.setUsername("Pradeep");
+		user1.setPassword(PasswordEncoderDecoderUtil.encodePassword("passw"));
 		service.saveUser(user1);
 		
 		User user2 = new User();
-		user2.setUsername("bbbbb");
-		user2.setPassword(PasswordEncoderDecoderUtil.encodePassword("bbbbb"));
+		user2.setUsername("Suresh");
+		user2.setPassword(PasswordEncoderDecoderUtil.encodePassword("passw"));
 		service.saveUser(user2);
 		
 		
 		User user3 = new User();
-		user3.setUsername("ccccc");
-		user3.setPassword(PasswordEncoderDecoderUtil.encodePassword("ccccc"));
+		user3.setUsername("Amisha");
+		user3.setPassword(PasswordEncoderDecoderUtil.encodePassword("passw"));
 		service.saveUser(user3);
 
 	}

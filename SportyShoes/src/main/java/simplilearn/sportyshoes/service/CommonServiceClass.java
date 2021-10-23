@@ -2,10 +2,13 @@ package simplilearn.sportyshoes.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -45,6 +48,9 @@ public class CommonServiceClass {
 
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private EntityManager em;
 
 	public List<Product> getAllProducts() {
 		return prodRepo.findAll();
@@ -272,6 +278,40 @@ public class CommonServiceClass {
 			Product product = findById.get();
 			prodRepo.delete(product);
 		}
+		
+	}
+
+	public List<Order> getOrderByDate(String fromDate, String toDate) {
+		
+		
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		  //convert String to LocalDate
+		LocalDate localDate = LocalDate.parse(fromDate, formatter);
+		  
+		LocalDate localDate2 = LocalDate.parse(toDate, formatter);
+		List<Order> byDates = ordRepo.getByDates(localDate, localDate2);
+		
+		System.out.println("****************************************");
+		System.out.println(byDates);
+		
+		testJoinQuery();
+		
+		return null;
+	}
+	
+	
+	public void testJoinQuery() {
+		
+		String query = "select po.ORDER_NUMBER, p.TITLE, p.PRICE, o.QUANTITY, o.ORDER_ITEM_TOTAL, c.NAME from ORDER_ITEM o INNER JOIN PROD_ORDER po ON o.ORDER_ID = po.ID INNER JOIN PRODUCT p  ON o.PRODUCT_ID = p.ID INNER JOIN CATEGORY c ON p.CATEGORY_ID = c.ID where c.NAME = :Cate";
+		Query queryNative = em.createNativeQuery(query);
+		queryNative.setParameter("Cate", "Cricket");
+		@SuppressWarnings("unchecked")
+		List<Object> resultList = queryNative.getResultList();
+		System.out.println("----------- NAtive query Alert ------------ ");
+		System.out.println(resultList);
+		
 		
 	}
 }

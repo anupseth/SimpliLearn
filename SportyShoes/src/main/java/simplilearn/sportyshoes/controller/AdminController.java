@@ -10,11 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import simplilearn.sportyshoes.dto.DateDto;
 import simplilearn.sportyshoes.entities.Category;
+import simplilearn.sportyshoes.entities.Order;
 import simplilearn.sportyshoes.entities.Product;
 import simplilearn.sportyshoes.entities.User;
 import simplilearn.sportyshoes.service.CommonServiceClass;
@@ -24,6 +28,16 @@ public class AdminController {
 
 	@Autowired
 	private CommonServiceClass service;
+	
+	
+	@ExceptionHandler(Exception.class)
+	public String handleExcep(HttpServletRequest req, Exception ex,Model model) {
+		System.out.println("Request: " + req.getRequestURL() + " raised " + ex);
+		model.addAttribute("exception",ex.getMessage());
+		model.addAttribute("url",req.getRequestURL());
+		return "Error";
+	}
+
 
 	@GetMapping("/admin")
 	public String getAdminPage(HttpSession session) {
@@ -220,6 +234,78 @@ public class AdminController {
 		model.addAttribute("prodList", service.getAllProducts());
 		
 		return "adminPages/ProductsList";
+	}
+	
+	
+	@GetMapping("/orderReport")
+	public String showReportPage(HttpSession session) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		return "adminPages/ReportPage";
+	}
+	
+	
+	@GetMapping("/reportByDate")
+	public String reportByDate(HttpSession session, Model model, DateDto dateDto) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		model.addAttribute("searchByDate", "yes");
+		
+		return "adminPages/ReportPage";
+	}
+	
+	
+	@GetMapping("/reportByCat")
+	public String reportByCat(HttpSession session,Model model) {
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		model.addAttribute("searchByCat", "yes");
+		return "adminPages/ReportPage";
+	}
+	
+	
+//	@PostMapping("/reportByDateP")
+//	public String reportByDatePost(HttpServletRequest request, HttpSession session) {
+//		
+//		if (session.getAttribute("adminUser") == null) {
+//			session.setAttribute("singinError",
+//					"Either user is not registered with us or Credentials provided is not correct");
+//			return "redirect:/";
+//		}
+//		return "adminPages/ReportPage";
+//	}
+	
+	
+	@PostMapping("/reportByDateP")
+	public String reportBydate(@Valid DateDto dateDto, HttpSession session, Model model) {
+		
+		
+		if (session.getAttribute("adminUser") == null) {
+			session.setAttribute("singinError",
+					"Either user is not registered with us or Credentials provided is not correct");
+			return "redirect:/";
+		}
+		
+		
+			System.out.println( " ---------------><----------------  Dates finally  :  "+  dateDto);
+		
+		List<Order>  orderList = service.getOrderByDate(dateDto.getFromDate(), dateDto.getToDate());
+		
+		return "adminPages/ReportPage";
 	}
 
 }

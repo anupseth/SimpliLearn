@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h1 align="center">Welcome to Sporty Shoes</h1>
+<hr>
+
+	<table style="width: 100%">
+		<tbody align="center">
+		<tr>
+			<td> <a href="/" style="font-size: medium;"> Home</a></td>
+			<td> <a href="/admin" style="font-size: medium;"> Admin Home</a></td>
+			<td th:if="${session.adminUser != null}"> <a href="/logout" style="font-size: medium;"> Log out</a></td>
+		</tr>
+		</tbody>
+	</table>
+<hr>
+
+<a href="/reportByDate" style="font-size: medium;"> Order-report-by-Date</a>
+
+<br/>
+
+<a href="/reportByCat" style="font-size: medium;"> Order-report-by-Category</a>
+
+<hr>
+
+<div id="reportByDate" th:if="${searchByDate == 'yes'}">
+
+	<form action="#" th:action="@{/reportByDateP}" th:object="${dateDto}"
+		method="post">
+<!-- 	
+			From Date :  <input type="date" name="fromDate">
+<br/>	
+			To Date :  <input type="date" name="toDate">
+			 -->
+			 
+			 <tr align="center">
+				<td>From Date:</td>
+				<td><input type="date" th:field="*{fromDate}"/></td>
+				<td th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}"
+					style="color: red;">Date error</td>
+			</tr>
+			<tr align="center">
+				<td>To Date:</td>
+				<td><input type="date" th:field="*{toDate}"/></td>
+				<td th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"
+					style="color: red;">Date Error</td>
+			</tr>
+			
+			
+			<button type="submit" style="width: 10%; margin-left: 35%">Search</button>
+	</form>
+
+</div>
+
+
+
+
+</body>
+</html>
