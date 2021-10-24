@@ -7,7 +7,7 @@ drop table if exists user CASCADE;
 drop sequence if exists hibernate_sequence;
 
 --Create sequence
-create sequence hibernate_sequence start with 20 increment by 1;
+create sequence hibernate_sequence start with 1 increment by 1;
 
 --Create tables
 create table category (
