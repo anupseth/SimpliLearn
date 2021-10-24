@@ -14,7 +14,8 @@ This online shopping website will interact with 2 kinds of users.
               - Add products.
               - Deleted products.
               - Edit products.
-              - See order report for products.
+              - See Report by dates and category for orders placed by buyers/users.
+              - Logout of the application
  - Customer
       
       - There are some preconfigured users in the application. 
@@ -35,7 +36,7 @@ This online shopping website will interact with 2 kinds of users.
 ## Technical Details:
 
 - We are using H2 in memory database here. Data will be lost after the application has been stopped.
-- We will populate the databse with some prodcts and users.
+- We will populate the databse with some dummy data for products and users.
 - Application runs on 8080 port.
 - We are using spring data jpa to access database. 
 
