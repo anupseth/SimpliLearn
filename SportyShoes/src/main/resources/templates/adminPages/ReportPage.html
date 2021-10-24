@@ -6,58 +6,147 @@
 </head>
 <body>
 
-<h1 align="center">Welcome to Sporty Shoes</h1>
-<hr>
+	<h1 align="center">Welcome to Sporty Shoes</h1>
+	<hr>
 
 	<table style="width: 100%">
 		<tbody align="center">
-		<tr>
-			<td> <a href="/" style="font-size: medium;"> Home</a></td>
-			<td> <a href="/admin" style="font-size: medium;"> Admin Home</a></td>
-			<td th:if="${session.adminUser != null}"> <a href="/logout" style="font-size: medium;"> Log out</a></td>
-		</tr>
+			<tr>
+				<td><a href="/" style="font-size: medium;"> Home</a></td>
+				<td><a href="/admin" style="font-size: medium;"> Admin Home</a></td>
+				<td th:if="${session.adminUser != null}"><a href="/logout"
+					style="font-size: medium;"> Log out</a></td>
+			</tr>
 		</tbody>
 	</table>
-<hr>
+	<hr>
 
-<a href="/reportByDate" style="font-size: medium;"> Order-report-by-Date</a>
+	<a href="/reportByDate" style="font-size: medium;">
+		Order-report-by-Date</a>
 
-<br/>
+	<br />
 
-<a href="/reportByCat" style="font-size: medium;"> Order-report-by-Category</a>
+	<a href="/reportByCat" style="font-size: medium;">
+		Order-report-by-Category</a>
 
-<hr>
+	<hr>
 
-<div id="reportByDate" th:if="${searchByDate == 'yes'}">
+	<div id="reportByDate" th:if="${searchByDate == 'yes'}">
 
-	<form action="#" th:action="@{/reportByDateP}" th:object="${dateDto}"
-		method="post">
-<!-- 	
+		<form action="#" th:action="@{/reportByDateP}" th:object="${dateDto}"
+			method="post">
+			<!-- 	
 			From Date :  <input type="date" name="fromDate">
 <br/>	
 			To Date :  <input type="date" name="toDate">
 			 -->
-			 
-			 <tr align="center">
+
+			<tr align="center">
 				<td>From Date:</td>
-				<td><input type="date" th:field="*{fromDate}"/></td>
+				<td><input type="date" th:field="*{fromDate}" /></td>
 				<td th:if="${#fields.hasErrors('fromDate')}" th:errors="*{fromDate}"
 					style="color: red;">Date error</td>
 			</tr>
 			<tr align="center">
 				<td>To Date:</td>
-				<td><input type="date" th:field="*{toDate}"/></td>
+				<td><input type="date" th:field="*{toDate}" /></td>
 				<td th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"
 					style="color: red;">Date Error</td>
 			</tr>
-			
-			
+
+
 			<button type="submit" style="width: 10%; margin-left: 35%">Search</button>
-	</form>
+		</form>
 
-</div>
+		<hr>
 
 
+
+		<div>
+			<h3>Order Report By Date</h3>
+
+			<span th:each="order : ${orderReport}"> ORDER NUMBER :
+				<h1 th:text="${order.orderNumber}">No order num</h1> <br> ORDER
+				TOTAL :
+				<h1 th:text="${order.orderTotal}">No order num</h1> <br>
+				<table style="width: 100%">
+					<thead align="center">
+						<tr>
+							<th>Product Name</th>
+							<th>Quantity</th>
+							<th>Price</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody align="center">
+						<tr th:each="orderItem : ${order.orderItem}">
+							<td th:if="${orderItem.product.title}"
+								th:text="${orderItem.product.title}" />
+							<td th:if="${orderItem.quantity}" th:text="${orderItem.quantity}" />
+							<td th:if="${orderItem.price}" th:text="${orderItem.price}" />
+							<td th:if="${orderItem.orderItemTotal}"
+								th:text="${orderItem.orderItemTotal}" />
+						</tr>
+					</tbody>
+				</table>
+				<hr>
+			</span>
+
+		</div>
+
+	</div>
+
+
+	<div id="reportByCat" th:if="${searchByCat == 'yes'}">
+
+		<form action="#" th:action="@{/reportByCatP}" method="post">
+			Select Category For which you would like to see purchase report: 
+			<select
+				name="categoryDrop" id="dropOperator">
+				<option th:each="cate : ${categories}" th:value="${cate}"
+					th:text="${cate}"></option>
+			</select>
+
+
+			<button type="submit" style="width: 10%; margin-left: 35%">Search</button>
+		</form>
+
+		<hr>
+
+		<div>
+			<h3>Order Report By Category</h3>
+
+			<table style="width: 100%">
+				<thead align="center">
+					<tr>
+						<th>Order Number</th>
+						<th>Product Name</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+
+				<tbody align="center">
+					<tr th:each="order : ${orderReportC}">
+						<td th:if="${order.orderNumber}" th:text="${order.orderNumber}" />
+
+						<td th:if="${order.title}" th:text="${order.title}" />
+
+						<td th:if="${order.price}" th:text="${order.price}" />
+
+						<td th:if="${order.quantity}" th:text="${order.quantity}" />
+
+						<td th:if="${order.orderItemTotal}" th:text="${order.orderItemTotal}" />
+					</tr>
+				</tbody>
+			</table>
+			<hr>
+
+		</div>
+
+
+	</div>
 
 
 </body>

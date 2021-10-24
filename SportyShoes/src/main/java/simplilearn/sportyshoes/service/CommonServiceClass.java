@@ -298,16 +298,16 @@ public class CommonServiceClass {
 		System.out.println("****************************************");
 		System.out.println(byDates);
 
-		testJoinQuery();
+		//testJoinQuery();
 
-		return null;
+		return byDates;
 	}
 
-	public List<OrderReportCatDTO> testJoinQuery() {
+	public List<OrderReportCatDTO> getReportByCategory(String catName) {
 
 		String query = "select po.ORDER_NUMBER, p.TITLE, p.PRICE, o.QUANTITY, o.ORDER_ITEM_TOTAL, c.NAME from ORDER_ITEM o INNER JOIN PROD_ORDER po ON o.ORDER_ID = po.ID INNER JOIN PRODUCT p  ON o.PRODUCT_ID = p.ID INNER JOIN CATEGORY c ON p.CATEGORY_ID = c.ID where c.NAME = :Cate";
 		Query queryNative = em.createNativeQuery(query);
-		queryNative.setParameter("Cate", "Cricket");
+		queryNative.setParameter("Cate", catName);
 		@SuppressWarnings("unchecked")
 		List<Object[]> resultList = queryNative.getResultList();
 		System.out.println("----------- NAtive query Alert ------------ ");
