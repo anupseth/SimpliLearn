@@ -112,19 +112,30 @@ public class CommonServiceClass {
 	}
 
 	@Transactional
-	public Order addOrderItemToCart(ProductOrderDTO prodOrDTO) {
+	public Order addOrderItemToCart(ProductOrderDTO prodOrDTO, HttpSession session) {
 
 		Product productById = getProductById(prodOrDTO.getProdId());
 		OrderItem orderItem = null;
 
 		Order order = findOrderByStatus(Status.INPROGRESS);
 
+		User user = null;
+
 		if (order == null) {
+			String username = (String) session.getAttribute("currentUser");
+
+			if (username != null && !username.isEmpty())
+				user = userRepo.findByUsername(username);
+
 			order = new Order();
 			order.setOrderDate(LocalDate.now());
 			order.setStatus(Status.INPROGRESS);
 			order.setOrderNumber("ORD" + LocalDateTime.now().getDayOfMonth() + LocalDateTime.now().getMonthValue()
 					+ LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond());
+
+			user.getOrders().add(order);
+			order.setUser(user);
+
 		}
 
 		List<OrderItem> collect = order.getOrderItem().stream()
@@ -177,6 +188,9 @@ public class CommonServiceClass {
 //			saveOrder.getOrderItem().set(saveOrder.getOrderItem().size()-1, saveOrderItem);
 
 		// Order saveOrder = ordRepo.save(order);
+		if (user != null)
+			userRepo.save(user);
+
 		OrderItem saveOrderItem = ordItemRepo.save(orderItem);
 
 		order.getOrderItem().add(saveOrderItem);
@@ -191,6 +205,7 @@ public class CommonServiceClass {
 			order = findById.get();
 			order.setStatus(Status.COMPLETED);
 			order.getOrderItem().forEach(ordItem -> ordItem.setStatus(Status.COMPLETED));
+			ordRepo.save(order);
 			return true;
 		}
 
@@ -293,19 +308,19 @@ public class CommonServiceClass {
 		LocalDate localDate = LocalDate.parse(fromDate, formatter);
 
 		LocalDate localDate2 = LocalDate.parse(toDate, formatter);
-		List<Order> byDates = ordRepo.getByDates(localDate, localDate2);
+		List<Order> byDates = ordRepo.getByDates(localDate, localDate2,Status.COMPLETED);
 
 		System.out.println("****************************************");
 		System.out.println(byDates);
 
-		//testJoinQuery();
+		// testJoinQuery();
 
 		return byDates;
 	}
 
 	public List<OrderReportCatDTO> getReportByCategory(String catName) {
 
-		String query = "select po.ORDER_NUMBER, p.TITLE, p.PRICE, o.QUANTITY, o.ORDER_ITEM_TOTAL, c.NAME from ORDER_ITEM o INNER JOIN PROD_ORDER po ON o.ORDER_ID = po.ID INNER JOIN PRODUCT p  ON o.PRODUCT_ID = p.ID INNER JOIN CATEGORY c ON p.CATEGORY_ID = c.ID where c.NAME = :Cate";
+		String query = "select po.ORDER_NUMBER, p.TITLE, p.PRICE, o.QUANTITY, o.ORDER_ITEM_TOTAL, pu.USERNAME from ORDER_ITEM o INNER JOIN PROD_ORDER po ON o.ORDER_ID = po.ID INNER JOIN PRODUCT p  ON o.PRODUCT_ID = p.ID INNER JOIN CATEGORY c ON p.CATEGORY_ID = c.ID INNER JOIN PROD_USER pu ON po.USER_ID = pu.ID where c.NAME = :Cate and po.STATUS = 'COMPLETED'";
 		Query queryNative = em.createNativeQuery(query);
 		queryNative.setParameter("Cate", catName);
 		@SuppressWarnings("unchecked")
@@ -315,16 +330,26 @@ public class CommonServiceClass {
 		List<OrderReportCatDTO> orderRepoList = new ArrayList<OrderReportCatDTO>();
 
 		resultList.forEach((obj) -> {
-			OrderReportCatDTO  dto = new OrderReportCatDTO();
-			dto.setOrderNumber((String)obj[0]);
-			dto.setTitle((String)obj[1]);
-			dto.setPrice((Double)obj[2]);
-			dto.setQuantity((int)obj[3]);
-			dto.setOrderItemTotal((Double)obj[4]);
+			OrderReportCatDTO dto = new OrderReportCatDTO();
+			dto.setOrderNumber((String) obj[0]);
+			dto.setTitle((String) obj[1]);
+			dto.setPrice((Double) obj[2]);
+			dto.setQuantity((int) obj[3]);
+			dto.setOrderItemTotal((Double) obj[4]);
+			dto.setName((String) obj[5]);
 			orderRepoList.add(dto);
 		});
-		 
+
 		System.out.println(orderRepoList);
 		return orderRepoList;
+	}
+
+	public void markOrdersAsFailed() {
+		Order findByStatus = ordRepo.findByStatus(Status.INPROGRESS);
+		if (findByStatus != null) {
+			findByStatus.setStatus(Status.FAILED);
+			findByStatus.getOrderItem().forEach(ordItem -> ordItem.setStatus(Status.FAILED));
+			ordRepo.save(findByStatus);
+		}
 	}
 }

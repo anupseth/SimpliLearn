@@ -170,6 +170,7 @@ public class WebController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 
+		service.markOrdersAsFailed();
 		session.setAttribute("currentUser", null);
 		session.setAttribute("adminUser", null);
 		session.setAttribute("orderCart", null);
@@ -215,7 +216,7 @@ public class WebController {
 			return "Order";
 		else {
 
-			Order order = service.addOrderItemToCart(prodOrDTO);
+			Order order = service.addOrderItemToCart(prodOrDTO, session);
 
 			session.setAttribute("orderCart", order);
 

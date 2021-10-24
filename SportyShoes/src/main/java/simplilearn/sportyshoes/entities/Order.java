@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -33,6 +34,9 @@ public class Order {
 	
 	@Column(unique = true)
 	private String orderNumber;
+	
+	@ManyToOne
+	private User user;
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orderItem = new ArrayList<OrderItem>();

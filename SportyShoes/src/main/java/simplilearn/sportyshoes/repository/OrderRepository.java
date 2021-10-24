@@ -14,6 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	
 	public Order findByStatus(Status status);
 	
-	@Query("Select o from Order o where o.orderDate between ?1 and ?2")
-	public List<Order> getByDates(LocalDate localDate, LocalDate localDate2);
+	@Query("Select o from Order o where o.orderDate between ?1 and ?2 and o.status = ?3")
+	public List<Order> getByDates(LocalDate localDate, LocalDate localDate2, Status status);
 }

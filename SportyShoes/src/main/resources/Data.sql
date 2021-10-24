@@ -33,6 +33,7 @@ create table order_item (
         order_number varchar(255),
         order_total float,
         status varchar(255),
+        user_id integer,
         primary key (id)
     );
 	
@@ -74,6 +75,11 @@ alter table product
        add constraint FK1mtsbur82frn64de7balymq9s 
        foreign key (category_id) 
        references category;
+	   
+ alter table prod_order 
+       add constraint FKbdhd0fvhn48u2qd8dtp6dpaa6 
+       foreign key (user_id) 
+       references prod_user;
 	   
 --Data insertion
 
