@@ -3,6 +3,7 @@ package simplilearn.sportyshoes.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import simplilearn.sportyshoes.dto.OrderReportCatDTO;
 import simplilearn.sportyshoes.dto.ProductOrderDTO;
 import simplilearn.sportyshoes.entities.Category;
 import simplilearn.sportyshoes.entities.Order;
@@ -48,7 +50,7 @@ public class CommonServiceClass {
 
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	@Autowired
 	private EntityManager em;
 
@@ -133,8 +135,10 @@ public class CommonServiceClass {
 			for (OrderItem ordItem : collect) {
 
 				if (ordItem.getProduct().getId() == productById.getId()) {
-					ordItem.setQuantity(ordItem.getQuantity() + prodOrDTO.getQuantity());
-					ordItem.setOrderItemTotal(ordItem.getQuantity() * ordItem.getPrice());
+					order.getOrderItem().remove(ordItem);
+					orderItem = ordItemRepo.findById(ordItem.getId()).get();
+					orderItem.setQuantity(ordItem.getQuantity() + prodOrDTO.getQuantity());
+					orderItem.setOrderItemTotal(ordItem.getQuantity() * ordItem.getPrice());
 					order.setOrderTotal(order.getOrderTotal() + ordItem.getOrderItemTotal());
 				}
 
@@ -271,47 +275,56 @@ public class CommonServiceClass {
 	}
 
 	public void deleteProduct(Integer id) {
-	
+
 		Optional<Product> findById = prodRepo.findById(id);
-		
-		if(findById.isPresent()) {
+
+		if (findById.isPresent()) {
 			Product product = findById.get();
 			prodRepo.delete(product);
 		}
-		
+
 	}
 
 	public List<Order> getOrderByDate(String fromDate, String toDate) {
-		
-		
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-		  //convert String to LocalDate
+		// convert String to LocalDate
 		LocalDate localDate = LocalDate.parse(fromDate, formatter);
-		  
+
 		LocalDate localDate2 = LocalDate.parse(toDate, formatter);
 		List<Order> byDates = ordRepo.getByDates(localDate, localDate2);
-		
+
 		System.out.println("****************************************");
 		System.out.println(byDates);
-		
+
 		testJoinQuery();
-		
+
 		return null;
 	}
-	
-	
-	public void testJoinQuery() {
-		
+
+	public List<OrderReportCatDTO> testJoinQuery() {
+
 		String query = "select po.ORDER_NUMBER, p.TITLE, p.PRICE, o.QUANTITY, o.ORDER_ITEM_TOTAL, c.NAME from ORDER_ITEM o INNER JOIN PROD_ORDER po ON o.ORDER_ID = po.ID INNER JOIN PRODUCT p  ON o.PRODUCT_ID = p.ID INNER JOIN CATEGORY c ON p.CATEGORY_ID = c.ID where c.NAME = :Cate";
 		Query queryNative = em.createNativeQuery(query);
 		queryNative.setParameter("Cate", "Cricket");
 		@SuppressWarnings("unchecked")
-		List<Object> resultList = queryNative.getResultList();
+		List<Object[]> resultList = queryNative.getResultList();
 		System.out.println("----------- NAtive query Alert ------------ ");
 		System.out.println(resultList);
-		
-		
+		List<OrderReportCatDTO> orderRepoList = new ArrayList<OrderReportCatDTO>();
+
+		resultList.forEach((obj) -> {
+			OrderReportCatDTO  dto = new OrderReportCatDTO();
+			dto.setOrderNumber((String)obj[0]);
+			dto.setTitle((String)obj[1]);
+			dto.setPrice((Double)obj[2]);
+			dto.setQuantity((int)obj[3]);
+			dto.setOrderItemTotal((Double)obj[4]);
+			orderRepoList.add(dto);
+		});
+		 
+		System.out.println(orderRepoList);
+		return orderRepoList;
 	}
 }
