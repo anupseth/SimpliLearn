@@ -41,4 +41,7 @@ This online shopping website will interact with 2 kinds of users.
 - We are using spring data jpa to access database. 
 
 
+# To Run the application just download the project and run the maven command from the project directory "mvn spring-boot:run"
+
+
             
